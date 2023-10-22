@@ -2,7 +2,7 @@
 
 session_start();
 
-if (!isset($_SESSION['username'])) {
+if (!isset($_SESSION['name'])) {
     header("Location: login.php");
 }
 
@@ -48,19 +48,35 @@ if (!isset($_SESSION['username'])) {
            
         </nav>
     </header>
+    <?php echo "<h1>Welcome " . $_SESSION['name'] . "</h1>"; ?>
     <body> 
-        <div class ="container">
-            <div class ="row">
-                <div class ="service">
-                    <h2> agent </h2>
+         
+            <div class="delivery-services-container">
+                <a href="Doorstep.php" class="service">
+                    <div class="service-icon">
+                        <img src="doorstep-icon.png" alt="Doorstep">
+                    </div>
+                    <div class="service-name">Doorstep</div>
+                </a>
+                <a href="agent.php" class="service">
+                    <div class="service-icon">
+                        <img src="agent-icon.png" alt="Agent ">
+                    </div>
+                    <div class="service-name">Agent</div>
+                </a>
 
-                </div>
+                <a href="errand.php" class="service">
+                    <div class="service-icon">
+                        <img src="errand-icon.png" alt="Errand ">
+                    </div>
+                    <div class="service-name">Errand</div>
+                </a>
             </div>
-        </div>
+       
 
     </body>
 
-    <?php echo "<h1>Welcome " . $_SESSION['username'] . "</h1>"; ?>
+    
     
 </body>
  

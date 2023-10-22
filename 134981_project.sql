@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 13, 2023 at 10:02 AM
+-- Generation Time: Oct 22, 2023 at 08:37 AM
 -- Server version: 10.4.17-MariaDB
 -- PHP Version: 8.0.0
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `valia`
+-- Database: `134981 project`
 --
 
 -- --------------------------------------------------------
@@ -29,24 +29,12 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `users` (
   `id` int(11) NOT NULL,
-  `username` varchar(255) NOT NULL,
+  `name` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
+  `Phone` varchar(15) NOT NULL,
   `password` varchar(255) NOT NULL,
-  `Phone` varchar(20) NOT NULL
+  `code` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `users`
---
-
-INSERT INTO `users` (`id`, `username`, `email`, `password`, `Phone`) VALUES
-(9, 'oscar', 'oscarfrankline@gmail.com', '827ccb0eea8a706c4c34a16891f84e7b', ''),
-(10, 'john', 'johndoe@gmail.com', 'b8c1aff102d74a26531ce9ba78261a6c', ''),
-(11, 'oscarfrank', 'email@gmail.com', '202cb962ac59075b964b07152d234b70', ''),
-(12, '134981', 'frankline.otieno@strathmore.edu', '202cb962ac59075b964b07152d234b70', ''),
-(13, 'oscarfrank', 'john@gmail.com', '202cb962ac59075b964b07152d234b70', ''),
-(14, '134981', 'agnesatieno@strathmore.edu', '202cb962ac59075b964b07152d234b70', ''),
-(15, '', '', '', '');
 
 --
 -- Indexes for dumped tables
@@ -66,7 +54,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

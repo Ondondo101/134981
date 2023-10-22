@@ -9,70 +9,40 @@ error_reporting(0);
 
 session_start();
 
-if (isset($_SESSION['username'])) {
-    header("Location: login.php");
-}
-function generateOTP() {
-    return rand(100000, 999999);
+if (isset($_SESSION['name'])) {
+    header("Location: index.php");
 }
 
 if (isset($_POST['submit'])) {
-    $username = $_POST['username'];
-    $email = $_POST['email'];
-	$phone = $_POST[ 'phone'];
-    $password = md5($_POST['password']);
-    $cpassword = md5($_POST['cpassword']);
+	$username = $_POST['name'];
+	$email = $_POST['email'];
+	$password = md5($_POST['password']);
+	$cpassword = md5($_POST['cpassword']);
 
-    if ($password == $cpassword) {
-        $sql = "SELECT * FROM users WHERE email='$email'";
-        $result = mysqli_query($conn, $sql);
-        if (!$result->num_rows > 0) {
-            $otp = generateOTP(); // Generate OTP
-
-            // Store OTP in the session
-            $_SESSION['otp'] = $otp;
-
-            // Use your Twilio credentials
-            $twilioSid = 'ACda2564fccdb5071b163cf2d42e3c7303';
-            $twilioAuthToken = '960bbcf79b319c5266e037fed5cc9699';
-            $twilioPhoneNumber = '+254752052001';
-
-            // Initialize Twilio client
-            $twilio = new Client($twilioSid, $twilioAuthToken);
-
-            // Send OTP via SMS
-            $message = $twilio->messages->create(
-                $email, // User's phone number
-                array(
-                    'from' => $twilioPhoneNumber,
-                    'body' => "Your OTP is: $otp"
-                )
-			
-            );
-			$_SESSION['phone'] = $phone;
-		// Redirect to OTP verification page
-           header("Location: verify.php");
+	if ($password == $cpassword) {
+		$sql = "SELECT * FROM users WHERE email='$email'";
+		$result = mysqli_query($conn, $sql);
+		if (!$result->num_rows > 0) {
+			$sql = "INSERT INTO users (name, email, password)
+					VALUES ('$username', '$email', '$password')";
+			$result = mysqli_query($conn, $sql);
+			if ($result) {
+				echo "<script>alert('Wow! User Registration Completed.')</script>";
+				$username = "";
+				$email = "";
+				$_POST['password'] = "";
+				$_POST['cpassword'] = "";
+			} else {
+				echo "<script>alert('Woops! Something Wrong Went.')</script>";
+			}
+		} else {
+			echo "<script>alert('Woops! Email Already Exists.')</script>";
+		}
+		
+	} else {
+		echo "<script>alert('Password Not Matched.')</script>";
+	}
 }
-
-            $sql = "INSERT INTO users (username, email, phone, password) VALUES ('$username', '$email', '$phone', '$password')";
-            $result = mysqli_query($conn, $sql);
-            if ($result) {
-                echo "<script>alert('User Registration Completed. Check your phone for OTP.')</script>";
-                $username = "";
-                $email = "";
-				$phone = "";
-                $_POST['password'] = "";
-                $_POST['cpassword'] = "";
-            } else {
-                echo "<script>alert('Something went wrong.')</script>";
-            }
-        } else {
-            echo "<script>alert('Email Already Exists.')</script>";
-        }
-    } else {
-        echo "<script>alert('Password Not Matched.')</script>";
-    }
-
 
 ?>
 
@@ -117,14 +87,12 @@ if (isset($_POST['submit'])) {
 		<form action="" method="POST" class="login-email">
             <p class="login-text" style="font-size: 2rem; font-weight: 800;">Register</p>
 			<div class="input-group">
-				<input type="text" placeholder="Username" name="username" value="<?php echo $username; ?>" required>
+				<input type="text" placeholder="Username" name="name" value="<?php echo $username; ?>" required>
 			</div>
 			<div class="input-group">
 				<input type="email" placeholder="Email" name="email" value="<?php echo $email; ?>" required>
 			</div>
-			<div class="input-group">
-    			<input type="text" placeholder="Phone Number" name="phone" value="<?php echo $phone; ?>" required>
-			</div>
+	
 
 			<div class="input-group">
 				<input type="password" placeholder="Password" name="password" value="<?php echo $_POST['password']; ?>" required>

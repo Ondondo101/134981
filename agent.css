@@ -1,0 +1,128 @@
+body {
+    font-family: Arial, sans-serif;
+    background-image: url(background.jpg);
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    background: linear-gradient(to right, rgba(255,0,0,0), rgba(133, 19, 19, 0.5));
+    border: 1px solid #ccc;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    max-width: 500px;
+    margin: 20px auto;
+}
+
+
+
+.notification {
+    background-color: #ffc107;
+    color: #333;
+    text-align: center;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+.notification ul{
+    text-align: center;
+    margin-top: 0;
+}
+
+h2 {
+    text-align:left;
+    margin-top: 0;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+}
+
+input[type="text"],
+select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.total-fee {
+    text-align: center;
+    font-weight: bold;
+    font-size: 18px;
+    margin-top: 10px;
+}
+
+button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+.option-container {
+    display: block;
+    margin-bottom: 15px;
+}
+
+.checkmark {
+    position: relative;
+    display: inline-block;
+    width: 25px;
+    height: 25px;
+    background-color: #eee;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.option-label {
+    display: inline-block;
+    vertical-align: top;
+    margin-left: 10px;
+}
+
+.small-text {
+    font-size: 12px;
+    color: #666;
+}
+
+/* Style for the checkmark when checked */
+.option-container input:checked + .checkmark {
+    background-color: #2196F3;
+}
+
+/* Hide the default checkbox */
+.option-container input {
+    display: none;
+}
+
+/* Style for the checkmark icon */
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+    left: 8px;
+    top: 5px;
+    width: 6px;
+    height: 12px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    transform: rotate(45deg);
+}
+
+/* Show the checkmark icon when checked */
+.option-container input:checked + .checkmark:after {
+    display: block;
+}

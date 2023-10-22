@@ -8,77 +8,24 @@ session_start();
 
 error_reporting(0);
 
-if (isset($_SESSION['username'])) {
+
+if (isset($_SESSION['name'])) {
     header("Location: welcome.php");
 }
 
-    if (isset($_POST['submit'])) {
-        $email = $_POST['email'];
-        $password = md5($_POST['password']);
-        $sql = "SELECT * FROM users WHERE email='$email' AND password='$password'";
-        $result = mysqli_query($conn, $sql);
-        if ($result->num_rows > 0) {
-            $row = mysqli_fetch_assoc($result);
-            $_SESSION['username'] = $row['username'];
-            header("Location: welcome.php");
-        } else {
-            echo "<script>alert('Woops! Email or Password is Wrong.')</script>";
-        }
-    }
+if (isset($_POST['submit'])) {
+	$email = $_POST['email'];
+	$password = md5($_POST['password']);
 
-
-    if ($result->num_rows > 0) {
-        // Generate and send OTP
-        $otp = generateOTP();
-        $phone = retrievePhoneNumber($phone); // Implement a function to retrieve user's phone number
-
-        if (sendOTP($otp, $phone)) {
-            // Store OTP in the session for verification
-            $_SESSION['otp'] = $otp;
-            $_SESSION['phone'] = $phone;
-
-            header("Location: verify.php"); // Redirect to OTP verification page
-        } else {
-            echo "<script>alert('Failed to send OTP. Please try again.')</script>";
-        }
-    }
-function generateOTP() {
-    return rand(100000, 999999);
-}
-
-function retrievePhoneNumber($phone) {
-    // Implement logic to retrieve the user's phone number associated with the provided email
-    // You may need to modify your database schema to store phone numbers or use a related table.
-    // For simplicity, we assume a direct mapping of email to phone number.
-    // Replace this with your own logic.
-    // Example: $phone = "1234567890";
-    return $phone;
-}
-
-
-function sendOTP($otp, $phone) {
-    // Use your Twilio credentials
-	$twilioSid = 'ACda2564fccdb5071b163cf2d42e3c7303';
-	$twilioAuthToken = '960bbcf79b319c5266e037fed5cc9699';
-	$twilioPhoneNumber = '+254752052001';
-
-    // Initialize Twilio client
-    $twilio = new Client($twilioSid, $twilioAuthToken);
-
-    // Send OTP via SMS
-    try {
-        $message = $twilio->messages->create(
-            $phone, // User's phone number
-            array(
-                'from' => $twilioPhoneNumber,
-                'body' => "Your OTP is: $otp"
-            )
-        );
-        return true;
-    } catch (Exception $e) {
-        // Handle any exceptions or errors
-        return false;
-    }
+	$sql = "SELECT * FROM users WHERE email='$email' AND password='$password'";
+	$result = mysqli_query($conn, $sql);
+	if ($result->num_rows > 0) {
+		$row = mysqli_fetch_assoc($result);
+		$_SESSION['name'] = $row['name'];
+		header("Location: welcome.php");
+	} else {
+		echo "<script>alert('Woops! Email or Password is Wrong.')</script>";
+	}
 }
 ?>
 
@@ -92,6 +39,7 @@ function sendOTP($otp, $phone) {
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
 	<link rel="stylesheet" type="text/css" href="nstyle.css">
+    
 
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 
@@ -100,7 +48,7 @@ function sendOTP($otp, $phone) {
 
 	<title>Login</title>
 </head>
-<body>
+
 <header>
 	<nav>
             <div class="logo">
@@ -121,6 +69,7 @@ function sendOTP($otp, $phone) {
             </ul>
         </nav>
     </header>
+<body>
 	<div class="container">
 		<form action="" method="POST" class="login-email">
 			<p class="login-text" style="font-size: 2rem; font-weight: 800;">Login</p>
