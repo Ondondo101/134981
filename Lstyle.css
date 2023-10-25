@@ -2,7 +2,7 @@
 /* Define some basic styling */
 body {
     font-family: Arial, sans-serif;
-    background: url('background.jpg') no-repeat center center/cover;
+    background-color: #fff;
     color: #333;
     line-height: 1.6;
 }
@@ -227,17 +227,7 @@ nav {
   .card:hover p {
     color: #f0f0f0;
   }
-  
- 
-  @media screen and (min-width: 992px) {
-    section {
-      padding: 1em 3em;
-    }
-    .column {
-      flex: 0 0 33.33%;
-      max-width: 33.33%;
-    }
-  }
+
 
 footer {
     background-color: #333;

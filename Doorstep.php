@@ -77,32 +77,58 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
 
                 <div class="delivery-options">
-        <label class="option-container">
-            <input type="radio" name="delivery_option" value="customer_pays" id="customerPays">
-            <span class="checkmark"></span>
-            <span class="option-label">
-                <strong>Customer pays for delivery</strong>
-                <br>
-                <span class="small-text">Delivery fee is provided by the customer</span>
-            </span>
-        </label>
+            <label class="option-container">
+                <input type="radio" name="delivery_option" value="customer_pays" id="customerPays">
+                <span class="checkmark"></span>
+                <span class="option-label">
+                    <strong>Customer pays for delivery</strong>
+                    <br>
+                    <span class="small-text">Delivery fee is provided by the customer</span>
+                </span>
+            </label>
 
-        <label class="option-container">
-            <input type="radio" name="delivery_option" value="vendor_pays" id="vendorPays">
-            <span class="checkmark"></span>
-            <span class="option-label">
-                <strong>Vendor pays for delivery</strong>
-                <br>
-                <span class="small-text">You will pay for the package delivery fee</span>
-            </span>
-        </label>
-    </div>
+            <label class="option-container">
+                <input type="radio" name="delivery_option" value="vendor_pays" id="vendorPays">
+                <span class="checkmark"></span>
+                <span class="option-label">
+                    <strong>Vendor pays for delivery</strong>
+                    <br>
+                    <span class="small-text">You will pay for the package delivery fee</span>
+                </span>
+            </label>
+        </div>
+
+        <div class="total-fee">
+            Total Fee: Ksh <span id="deliveryFee">0</span>
+        </div>
+
+            <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const customerPaysRadio = document.getElementById("customerPays");
+                const vendorPaysRadio = document.getElementById("vendorPays");
+                const deliveryFeeContainer = document.getElementById("deliveryFee");
+
+                function updateDeliveryFee() {
+                    if (customerPaysRadio.checked) {
+                        // Customer pays option selected
+                        deliveryFeeContainer.textContent = "0";
+                    } else if (vendorPaysRadio.checked) {
+                        // Vendor pays option selected
+                        deliveryFeeContainer.textContent = "300";
+                    }
+                }
+
+                // Add event listeners to radio buttons
+                customerPaysRadio.addEventListener("change", updateDeliveryFee);
+                vendorPaysRadio.addEventListener("change", updateDeliveryFee);
+
+                // Initial update based on the default option
+                updateDeliveryFee();
+            });
+        </script>
 
 
-            <h2>Delivery Fee</h2>
-            <div class="total-fee">
-                Total Fee: Ksh 300
-            </div>
+
             <div class="form-group">
                 <button type="submit">Submit</button>
             </div>
@@ -110,4 +136,3 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
 </body>
 </html>
-s

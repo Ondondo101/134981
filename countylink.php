@@ -45,10 +45,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </script>   
     <div class="container">
         <div class="notification">
-            Send from Agent to Agent at Ksh 250
+            Inter County delivery costs Ksh 300
         </div>
-        <h2>Agent Service</h2>
-        <form id="agentForm" action="process_agent.php" method="post">
+        <h2>Inter County Service</h2>
+        <form id= 'agentForm'action="process_countylink.php" method="post">
             <div class="form-group">
                 <label for="customerName">Customer Name</label>
                 <input type="text" id="customerName" name="customerName" required>
@@ -57,15 +57,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <label for="phoneNumber">Phone Number</label>
                 <input type="text" id="phoneNumber" name="phoneNumber" required>
             </div>
+            
             <h2>Where are you sending from?</h2>
             <div class="form-group">
                 <label for="sendingFrom"> From location</label>
                 <select id="sendingFrom" name="sendingFrom">
                         <option value=""></option>
-                        <option value="CBD">CBD</option>
-                        <option value="Umoja">Umoja</option>
-                        <option value="Gikomba">Gikomba</option>
-                        <option value="Kisumu">Kisumu</option>
+                        <option value="NAIROBI">NAIROBI</option>
+                        <option value="NAKURU">NAKURU</option>
+                        <option value="NAIVASHA">NAIVASHA</option>
+                        <option value="KISUMU">KISUMU</option>
+                        <option value="MOMBASA">MOMBASA</option>
                         <!-- Add more locations here -->
                     </select>
 
@@ -84,10 +86,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                             // Define the agent stores for each location
                             const agentStores = {
-                                'CBD': ['Platinum plaza', 'Soko House Room 101'],
-                                'Umoja': ['Store A', 'Store B', 'Store C'],
-                                'Gikomba': ['Shop 1', 'Shop 2'],
-                                'Kisumu': ['Kisumu Store 1', 'Kisumu Store 2'],
+                                'NAIROBI': ['Platinum plaza', 'Soko House Room 101'],
+                                'NAKURU': ['Store A', 'Store B', 'Store C'],
+                                'NAIVASHA': ['Shop 1', 'Shop 2'],
+                                'KISUMU': [' Store 1', 'Store 2'],
+                                'NAIROBI': ['Store 1', 'Store 2'],
                                 // Add more locations and stores here
                             };
 
@@ -136,10 +139,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <label for="sendingTo">To location</label>
                 <select id="sendingTo" name="sendingTo">
                         <option value=""></option>
-                        <option value="CBD">CBD</option>
-                        <option value="Umoja">Umoja</option>
-                        <option value="Gikomba">Gikomba</option>
-                        <option value="Kisumu">Kisumu</option>
+                        <option value="NAIROBI">NAIROBI</option>
+                        <option value="NAKURU">NAKURU</option>
+                        <option value="NAIVASHA">NAIVASHA</option>
+                        <option value="KISUMU">KISUMU</option>
+                        <option value="MOMBASA">MOMBASA</option>
                         <!-- Add more locations here -->
                     
                 </select>
@@ -159,10 +163,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                             // Define the agent stores for each location
                             const AgentStores = {
-                                'CBD': ['Platinum plaza', 'Soko House Room 101'],
-                                'Umoja': ['Store A', 'Store B', 'Store C'],
-                                'Gikomba': ['Shop 1', 'Shop 2'],
-                                'Kisumu': ['Kisumu Store 1', 'Kisumu Store 2'],
+                                'NAIROBI': ['Platinum plaza', 'Soko House Room 101'],
+                                'NAKURU': ['Store A', 'Store B', 'Store C'],
+                                'NAIVASHA': ['Shop 1', 'Shop 2'],
+                                'KISUMU': [' Store 1', 'Store 2'],
+                                'NAIROBI': ['Store 1', 'Store 2'],
                                 // Add more locations and stores here
                             };
 
@@ -208,7 +213,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         event.preventDefault(); // Prevent the form from submitting
 
                         // Calculate the delivery fee
-                        const deliveryFee = 250;
+                        const deliveryFee = 300;
 
                         // Display the delivery fee
                         const feeContainer = document.querySelector(".total-fee");
@@ -218,6 +223,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </script>
 
     </div>
-    
 </body>
 </html>

@@ -1,7 +1,7 @@
 /* Define some basic styling */
 body {
     font-family: Arial, sans-serif;
-    background-image: url(background.jpg);
+    background: url('background.jpg') no-repeat center center/cover;
     color: #333;
     line-height: 1.6;
 }

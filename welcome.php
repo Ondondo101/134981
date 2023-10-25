@@ -49,6 +49,18 @@ if (!isset($_SESSION['name'])) {
         </nav>
     </header>
     <?php echo "<h1>Welcome " . $_SESSION['name'] . "</h1>"; ?>
+        <div id="map"></div>
+    <script>
+    function initMap() {
+        // Initialize the map
+        var map = new google.maps.Map(document.getElementById('map'), {
+        center: { lat: -34.397, lng: 150.644 },
+        zoom: 8
+        });
+    }
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap" async defer></script>
+
     <body> 
          
             <div class="delivery-services-container">
@@ -63,6 +75,12 @@ if (!isset($_SESSION['name'])) {
                         <img src="agent-icon.png" alt="Agent ">
                     </div>
                     <div class="service-name">Agent</div>
+                </a>
+                <a href="countylink.php" class="service">
+                    <div class="service-icon">
+                        <img src="location-icon.png" alt="Agent ">
+                    </div>
+                    <div class="service-name">County Link</div>
                 </a>
 
                 <a href="errand.php" class="service">
