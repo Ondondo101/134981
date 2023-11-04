@@ -2,7 +2,7 @@
 /* Define some basic styling */
 body {
     font-family: Arial, sans-serif;
-    background:;
+    
     color: #333;
     line-height: 1.6;
 }
@@ -165,8 +165,8 @@ nav {
   section {
     height: 100vh;
     width: 100%;
-    display: grid;
-    place-items: center;
+    display:flex;;
+    place-items:inherit;
   }
   .row {
     display: flex;
@@ -178,16 +178,17 @@ nav {
     text-align: center;
   }
   .card {
-    width: 100%;
+    width: 25%;
     height: 100%;
     padding: 2em 1.5em;
     background: linear-gradient(#ffffff 50%, #2c7bfe 50%);
     background-size: 100% 200%;
     background-position: 0 2.5%;
-    border-radius: 5px;
+    border-radius: 10px;
     box-shadow: 0 0 35px rgba(0, 0, 0, 0.12);
     cursor: pointer;
     transition: 0.5s;
+    display: flex;
   }
   h3 {
     font-size: 20px;

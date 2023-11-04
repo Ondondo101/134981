@@ -65,9 +65,12 @@ if (isset($_POST['submit'])) {
 <body>
 	<header>
 	<nav>
-            <div class="logo">
-			 <img src="deli.png" alt="Company Logo" >
-            </div>
+		<a href="landing.html">
+		<div class="logo">
+			<img src="deli.png" alt="Company Logo">
+		</div>
+	</a>
+
 
             <form method="get" action="track.php" class="package-tracking-form">
             <label for="tracking-id"></label>

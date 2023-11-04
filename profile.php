@@ -48,9 +48,12 @@ $phone = "123-456-7890"; // Replace with the user's actual phone number
 
 	<header>
 	<nav>
+            <a href="landing.html">
             <div class="logo">
-			 <img src="deli.png" alt="Company Logo" >
+                <img src="deli.png" alt="Company Logo">
             </div>
+        </a>
+
 
             <form method="get" action="track.php" class="package-tracking-form">
             <label for="tracking-id"></label>

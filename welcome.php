@@ -28,9 +28,12 @@ if (!isset($_SESSION['name'])) {
 <body>
 <header>
 	<nav>
-            <div class="logo">
+        <a href="landing.html">
+        <div class="logo">
             <img src="deli.png" alt="Company Logo">
-            </div>
+        </div>
+    </a>
+
         
 
             <form method="get" action="track.php" class="package-tracking-form">
@@ -90,11 +93,94 @@ if (!isset($_SESSION['name'])) {
                     <div class="service-name">Errand</div>
                 </a>
             </div>
-       
 
-    </body>
 
-    
+        <div class="vendor-container">
+            <div class="New-container">
+                <div class="vendor-info">
+                    <div class="vendor-icon">
+                        <img src="">
+                    </div>
+                    <div class="vendor-label">
+                        New Packages
+                    </div>
+                    <div class="vendor-number">
+                        5
+                    </div>
+                </div>
+                </div>
+        
+
+            <div class="approval-container">
+                <div class="vendor-info">
+                    <div class="vendor-icon">
+                        <i class="fas fa-box"></i>
+                    </div>
+                    <div class="vendor-label">
+                        Waiting approval
+                    </div>
+                    <div class="vendor-number">
+                        5
+                    </div>
+                </div>
+            </div>
+
+                <div class="Dropped-container">
+                    <div class="vendor-info">
+                        <div class="vendor-icon">
+                            <i class="fas fa-box"></i>
+                        </div>
+                        <div class="vendor-label">
+                            Dropped Packages
+                        </div>
+                        <div class="vendor-number">
+                            5
+                        </div>
+                    </div>
+                </div>
+                <div class="Transit-container">
+                    <div class="vendor-info">
+                        <div class="vendor-icon">
+                            <i class="fas fa-box"></i>
+                        </div>
+                        <div class="vendor-label">
+                         Packages In Transit 
+                        </div>
+                        <div class="vendor-number">
+                            0
+                        </div>
+                    </div>
+                </div>
+                    <div class="Delivered-container">
+                        <div class="vendor-info">
+                            <div class="vendor-icon">
+                                <i class="fas fa-box"></i>
+                            </div>
+                            <div class="vendor-label">
+                                Delivered Packages
+                            </div>
+                            <div class="vendor-number">
+                                0
+                            </div>
+                        </div>
+                    </div>
+                        <div class="Undelivered-container">
+                            <div class="vendor-info">
+                                <div class="vendor-icon">
+                                    <i class="fas fa-box"></i>
+                                </div>
+                                <div class="vendor-label">
+                                    Undelivered Packages
+                                </div>
+                                <div class="vendor-number">
+                                    5
+                                </div>
+                            </div>
+                        </div>
+
+        </div>
+
+
     
 </body>
  
