@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="agentDashboard.css">
+</head>
+<body>
+    <div class="agent-container">
+        <h1>Agent Dashboard</h1>
+        
+        <!-- Package Approval Section -->
+        <div class="section">
+            <h2>Package Approval</h2>
+            <div class="package-list">
+                <!-- List of packages waiting for approval -->
+                <div class="package-item">
+                    <p>Package ID: 123</p>
+                    <p>Sender: John Doe</p>
+                    <p>Contents: Electronics</p>
+                    <button class="approve-button">Approve</button>
+                </div>
+                <!-- Repeat for other pending packages -->
+            </div>
+        </div>
+        
+        <!-- Package Dispatch Section -->
+        <div class="section">
+            <h2>Package Dispatch</h2>
+            <form action="dispatch.php" method="POST">
+                <label for="package-id">Package ID:</label>
+                <input type="text" name="package-id" id="package-id">
+                <button type="submit" class="dispatch-button">Dispatch</button>
+            </form>
+        </div>
+        
+        <!-- Notification Section -->
+        <div class="section">
+            <h2>Send Notification</h2>
+            <form action="send_notification.php" method="POST">
+                <label for="vendor-email">Vendor Email:</label>
+                <input type="email" name="vendor-email" id="vendor-email">
+                <label for="notification-text">Notification Text:</label>
+                <textarea name="notification-text" id="notification-text"></textarea>
+                <button type="submit" class="send-notification-button">Send Notification</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
