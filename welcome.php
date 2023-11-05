@@ -93,7 +93,7 @@ if (!isset($_SESSION['name'])) {
                     <div class="service-name">Errand</div>
                 </a>
             </div>
-
+<br></br>
 
         <div class="vendor-container">
             <div class="New-container">
@@ -105,7 +105,7 @@ if (!isset($_SESSION['name'])) {
                         New Packages
                     </div>
                     <div class="vendor-number">
-                        5
+                        0
                     </div>
                 </div>
                 </div>
@@ -120,7 +120,7 @@ if (!isset($_SESSION['name'])) {
                         Waiting approval
                     </div>
                     <div class="vendor-number">
-                        5
+                        0
                     </div>
                 </div>
             </div>
@@ -134,7 +134,7 @@ if (!isset($_SESSION['name'])) {
                             Dropped Packages
                         </div>
                         <div class="vendor-number">
-                            5
+                            0
                         </div>
                     </div>
                 </div>
@@ -173,7 +173,7 @@ if (!isset($_SESSION['name'])) {
                                     Undelivered Packages
                                 </div>
                                 <div class="vendor-number">
-                                    5
+                                    0
                                 </div>
                             </div>
                         </div>
