@@ -99,7 +99,7 @@ if (!isset($_SESSION['name'])) {
             <div class="New-container">
                 <div class="vendor-info">
                     <div class="vendor-icon">
-                        <img src="">
+                        <img src="new packages.png">
                     </div>
                     <div class="vendor-label">
                         New Packages
@@ -113,8 +113,8 @@ if (!isset($_SESSION['name'])) {
 
             <div class="approval-container">
                 <div class="vendor-info">
-                    <div class="vendor-icon">
-                        <i class="fas fa-box"></i>
+                <div class="vendor-icon">
+                        <img src="approval.png">
                     </div>
                     <div class="vendor-label">
                         Waiting approval
@@ -127,9 +127,9 @@ if (!isset($_SESSION['name'])) {
 
                 <div class="Dropped-container">
                     <div class="vendor-info">
-                        <div class="vendor-icon">
-                            <i class="fas fa-box"></i>
-                        </div>
+                    <div class="vendor-icon">
+                        <img src="dropped.png">
+                    </div>
                         <div class="vendor-label">
                             Dropped Packages
                         </div>
@@ -140,9 +140,9 @@ if (!isset($_SESSION['name'])) {
                 </div>
                 <div class="Transit-container">
                     <div class="vendor-info">
-                        <div class="vendor-icon">
-                            <i class="fas fa-box"></i>
-                        </div>
+                    <div class="vendor-icon">
+                        <img src="Intransit.png">
+                    </div>
                         <div class="vendor-label">
                          Packages In Transit 
                         </div>
@@ -153,9 +153,9 @@ if (!isset($_SESSION['name'])) {
                 </div>
                     <div class="Delivered-container">
                         <div class="vendor-info">
-                            <div class="vendor-icon">
-                                <i class="fas fa-box"></i>
-                            </div>
+                        <div class="vendor-icon">
+                        <img src="delivered.png">
+                    </div>
                             <div class="vendor-label">
                                 Delivered Packages
                             </div>
@@ -166,9 +166,9 @@ if (!isset($_SESSION['name'])) {
                     </div>
                         <div class="Undelivered-container">
                             <div class="vendor-info">
-                                <div class="vendor-icon">
-                                    <i class="fas fa-box"></i>
-                                </div>
+                            <div class="vendor-icon">
+                                <img src="not-delivered.png">
+                            </div>
                                 <div class="vendor-label">
                                     Undelivered Packages
                                 </div>

@@ -247,12 +247,12 @@ body, h1, h2, p, ul, li {
 /* delivery status*/
 
 .vendor-container {
-    width: 1400px;
+    width: 1200px;
     min-height: 400px;
     display:flex;
     justify-content: center;
     background:  linear-gradient(to right, rgba(255,0,0,0), rgba(133, 19, 19, 0.5));
-    border-radius: 10px;
+    border-radius: 50px;
     box-shadow: 0 0 5px rgba(0,0,0,.3);
     padding: 0px;
     
@@ -308,7 +308,7 @@ body, h1, h2, p, ul, li {
 .vendor-icon {
     width: 80px;
     height: 80px;
-    background-color:#ff9900;
+    
     border-radius: 50%;
     display: flex;
     align-items: center;
