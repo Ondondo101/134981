@@ -54,13 +54,26 @@ if (!isset($_SESSION['name'])) {
     <?php echo "<h1>Welcome " . $_SESSION['name'] . "</h1>"; ?>
         <div id="map"></div>
     <script>
-    function initMap() {
-        // Initialize the map
-        var map = new google.maps.Map(document.getElementById('map'), {
-        center: { lat: -34.397, lng: 150.644 },
-        zoom: 8
-        });
-    }
+
+    function updatePackageCount(status, elementId) {
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', `get_${status}_packages.php`, true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    const data = JSON.parse(xhr.responseText);
+                    document.getElementById(elementId).textContent = data.length; // Update the count
+                }
+            };
+            xhr.send();
+        }
+
+        // Usage: Update counts for each status
+        updatePackageCount('new', 'newPackagesCount');
+        updatePackageCount('Pending Approval', 'pendingPackagesCount');
+        updatePackageCount('Dropped', 'droppedPackagesCount');
+        updatePackageCount('In Transit', 'transitPackagesCount');
+        // Repeat for other statuses
+
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap" async defer></script>
 
@@ -104,7 +117,7 @@ if (!isset($_SESSION['name'])) {
                     <div class="vendor-label">
                         New Packages
                     </div>
-                    <div class="vendor-number">
+                    <div class="vendor-number" id="newPackagesCount">
                         0
                     </div>
                 </div>
@@ -117,9 +130,9 @@ if (!isset($_SESSION['name'])) {
                         <img src="approval.png">
                     </div>
                     <div class="vendor-label">
-                        Waiting approval
+                        Pending approval
                     </div>
-                    <div class="vendor-number">
+                    <div class="vendor-number" id="pendingPackagesCount">
                         0
                     </div>
                 </div>
@@ -133,9 +146,9 @@ if (!isset($_SESSION['name'])) {
                         <div class="vendor-label">
                             Dropped Packages
                         </div>
-                        <div class="vendor-number">
+                        <div class="vendor-number" id="droppedPackagesCount">
                             0
-                        </div>
+                    </div>
                     </div>
                 </div>
                 <div class="Transit-container">
@@ -144,11 +157,11 @@ if (!isset($_SESSION['name'])) {
                         <img src="Intransit.png">
                     </div>
                         <div class="vendor-label">
-                         Packages In Transit 
+                          In Transit packages
                         </div>
-                        <div class="vendor-number">
+                        <div class="vendor-number" id="transitPackagesCount">
                             0
-                        </div>
+                    </div>
                     </div>
                 </div>
                     <div class="Delivered-container">
@@ -156,12 +169,12 @@ if (!isset($_SESSION['name'])) {
                         <div class="vendor-icon">
                         <img src="delivered.png">
                     </div>
-                            <div class="vendor-label">
-                                Delivered Packages
-                            </div>
-                            <div class="vendor-number">
-                                0
-                            </div>
+                        <div class="vendor-label">
+                            Delivered packages
+                        </div>
+                        <div class="vendor-number" id="deliveredPackagesCount">
+                            0
+                    </div>
                         </div>
                     </div>
                         <div class="Undelivered-container">
@@ -172,9 +185,9 @@ if (!isset($_SESSION['name'])) {
                                 <div class="vendor-label">
                                     Undelivered Packages
                                 </div>
-                                <div class="vendor-number">
-                                    0
-                                </div>
+                                <div class="vendor-number" id="undeliveredPackagesCount">
+                                     0
+                    </div>
                             </div>
                         </div>
 

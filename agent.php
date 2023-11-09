@@ -1,4 +1,6 @@
 <?php
+include 'connection.php'; // Include the database connection file
+
 // Initialize variables for form fields
 $customerName = $phoneNumber = $sendingFrom = $packageColor = $sendingTo = "";
 
@@ -11,18 +13,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $packageColor = $_POST["packageColor"];
     $sendingTo = $_POST["sendingTo"];
 
-    // Check if all fields are filled
-    if (!empty($customerName) && !empty($phoneNumber) && !empty($sendingFrom) && !empty($packageColor) && !empty($sendingTo)) {
-        // Calculate the total fee
-        $totalFee = 300;
+    // Database connection
+    $conn = mysqli_connect($server, $user, $pass, $database);
 
-        // Display the total fee
-        echo "Total Fee: Ksh $totalFee";
-    } else {
-        // If any field is empty, display a message
-        echo "Please fill in all the information to calculate the total fee.";
+    // Check if the connection was successful
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
     }
+
+    // Insert the package data into the database with a "Pending Approval" status
+    $sql = "INSERT INTO agentpackages (customerName, phoneNumber, sendingFrom, packageColor, sendingTo, status) VALUES ('$customerName', '$phoneNumber', '$sendingFrom', '$packageColor', '$sendingTo', 'Pending Approval')";
+
+    if ($conn->query($sql) === TRUE) {
+        // Data inserted successfully
+        echo "Package submitted successfully.";
+    } else {
+        // Error handling
+        echo "Error: " . $sql . "<br>" . $conn->error;
+    }
+
+    $conn->close(); // Close the database connection
 }
+
+
 ?>
 
 <!DOCTYPE html>
@@ -48,7 +61,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             Send from Agent to Agent at Ksh 250
         </div>
         <h2>Agent Service</h2>
-        <form id="agentForm" action="process_agent.php" method="post">
+        <form id="agentForm" method="post">
             <div class="form-group">
                 <label for="customerName">Customer Name</label>
                 <input type="text" id="customerName" name="customerName" required>
@@ -65,7 +78,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <option value="CBD">CBD</option>
                         <option value="Umoja">Umoja</option>
                         <option value="Gikomba">Gikomba</option>
-                        <option value="Kisumu">Kisumu</option>
+                        <option value="Utawala">Utawala</option>
                         <!-- Add more locations here -->
                     </select>
 
@@ -87,7 +100,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 'CBD': ['Platinum plaza', 'Soko House Room 101'],
                                 'Umoja': ['Store A', 'Store B', 'Store C'],
                                 'Gikomba': ['Shop 1', 'Shop 2'],
-                                'Kisumu': ['Kisumu Store 1', 'Kisumu Store 2'],
+                                'Utawala': ['Utawala Store 1', 'Utawala Store 2'],
                                 // Add more locations and stores here
                             };
 
@@ -203,18 +216,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <script>
                 document.addEventListener("DOMContentLoaded", function() {
                     const form = document.getElementById("agentForm");
+                    let firstClick = true;
 
                     form.addEventListener("submit", function(event) {
                         event.preventDefault(); // Prevent the form from submitting
 
-                        // Calculate the delivery fee
-                        const deliveryFee = 250;
+                        if (firstClick) {
+                            // Calculate the delivery fee and display it
+                            const deliveryFee = 250;
+                            const feeContainer = document.querySelector(".total-fee");
+                            feeContainer.textContent = `Total Fee: Ksh ${deliveryFee}`;
 
-                        // Display the delivery fee
-                        const feeContainer = document.querySelector(".total-fee");
-                        feeContainer.textContent = `Total Fee: Ksh ${deliveryFee}`;
+                            // Change the button text to "Confirm Submit"
+                            const submitButton = form.querySelector("button[type='submit']");
+                            submitButton.textContent = "Confirm Submit";
+                            
+                            firstClick = false;
+                        } else {
+                            // If it's the second click, submit the form
+                            form.submit();
+                        }
                     });
                 });
+
             </script>
 
     </div>

@@ -1,4 +1,6 @@
 <?php
+include 'connection.php'; // Include the database connection file
+
 // Initialize variables for form fields
 $customerName = $phoneNumber = $sendingFrom = $packageColor = $sendingTo = "";
 
@@ -11,17 +13,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $packageColor = $_POST["packageColor"];
     $sendingTo = $_POST["sendingTo"];
 
-    // Check if all fields are filled
-    if (!empty($customerName) && !empty($phoneNumber) && !empty($sendingFrom) && !empty($packageColor) && !empty($sendingTo)) {
-        // Calculate the total fee
-        $totalFee = 300;
+    // Database connection
+    $conn = mysqli_connect($server, $user, $pass, $database);
 
-        // Display the total fee
-        echo "Total Fee: Ksh $totalFee";
-    } else {
-        // If any field is empty, display a message
-        echo "Please fill in all the information to calculate the total fee.";
+    // Check if the connection was successful
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
     }
+
+    // Insert the package data into the database with a "Pending Approval" status
+    $sql = "INSERT INTO countypackages (customerName, phoneNumber, sendingFrom, packageColor, sendingTo, status) VALUES ('$customerName', '$phoneNumber', '$sendingFrom', '$packageColor', '$sendingTo', 'Pending Approval')";
+
+    if ($conn->query($sql) === TRUE) {
+        // Data inserted successfully
+        echo "Package submitted successfully.";
+    } else {
+        // Error handling
+        echo "Error: " . $sql . "<br>" . $conn->error;
+    }
+
+    $conn->close(); // Close the database connection
 }
 ?>
 
@@ -48,7 +59,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             Inter County delivery costs Ksh 300
         </div>
         <h2>Inter County Service</h2>
-        <form id= 'agentForm'action="process_countylink.php" method="post">
+        <form id= 'agentForm' method="post">
             <div class="form-group">
                 <label for="customerName">Customer Name</label>
                 <input type="text" id="customerName" name="customerName" required>
@@ -206,20 +217,73 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
         </form>
         <script>
+                            // Get references to the dropdowns
+                            const sendingToDropdown = document.getElementById('sendingTo');
+                            const AgentStoreDropdown = document.getElementById('AgentStore');
+
+                            // Define the agent stores for each location
+                            const AgentStores = {
+                                'CBD': ['Platinum plaza', 'Soko House Room 101'],
+                                'Umoja': ['Store A', 'Store B', 'Store C'],
+                                'Gikomba': ['Shop 1', 'Shop 2'],
+                                'Kisumu': ['Kisumu Store 1', 'Kisumu Store 2'],
+                                // Add more locations and stores here
+                            };
+
+                            // Function to update agent store options based on location selection
+                            function updateAgentStores() {
+                                const selectedLocation = sendingToDropdown.value;
+                                const stores = agentStores[selectedLocation] || [];
+
+                                // Clear existing options
+                                AgentStoreDropdown.innerHTML = '';
+
+                                // Add new options
+                                for (const store of stores) {
+                                    const option = document.createElement('option');
+                                    option.value = store;
+                                    option.textContent = store;
+                                    AgentStoreDropdown.appendChild(option);
+                                }
+                            }
+
+                            // Add an event listener to update the agent stores when the location changes
+                            sendingToDropdown.addEventListener('change', updateAgentStores);
+
+                            // Initial call to populate agent stores based on the default location
+                            updateAgentStores();
+                        </script>
+
+
+            </div>
+
+
+        <script>
                 document.addEventListener("DOMContentLoaded", function() {
                     const form = document.getElementById("agentForm");
+                    let firstClick = true;
 
                     form.addEventListener("submit", function(event) {
                         event.preventDefault(); // Prevent the form from submitting
 
-                        // Calculate the delivery fee
-                        const deliveryFee = 300;
+                        if (firstClick) {
+                            // Calculate the delivery fee and display it
+                            const deliveryFee = 250;
+                            const feeContainer = document.querySelector(".total-fee");
+                            feeContainer.textContent = `Total Fee: Ksh ${deliveryFee}`;
 
-                        // Display the delivery fee
-                        const feeContainer = document.querySelector(".total-fee");
-                        feeContainer.textContent = `Total Fee: Ksh ${deliveryFee}`;
+                            // Change the button text to "Confirm Submit"
+                            const submitButton = form.querySelector("button[type='submit']");
+                            submitButton.textContent = "Confirm Submit";
+                            
+                            firstClick = false;
+                        } else {
+                            // If it's the second click, submit the form
+                            form.submit();
+                        }
                     });
                 });
+
             </script>
 
     </div>

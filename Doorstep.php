@@ -46,24 +46,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="container">
 
         <h2>Doorstep Services</h2>
-        <form action="process_doorstep.php" method="post">
+        <form id="DoorstepForm" method="post">
 
             <h2>Where are you sending to?</h2>
             <div class="form-group">
                 <label for="sendingTo"> Select location</label>
-                <select id="sendingTo" name="sendingTo" required>
-                    <option value="Location 1"></option>
-                    <option value="Location 2">CBD</option>
-                    <option value="Location 3">Umoja</option>
-                    <option value="Location 4">Gikomba</option>
-                    <option value="Location 5">kisumu</option>
+                <select id="sendingTo" name="sendingTo" required >
+                    <option value="Location 1">Selects customer's pick up location</option>
+                    <option value="CBD">CBD</option>
+                    <option value="Umoja">Umoja</option>
+                    <option value="Gikomba">Gikomba</option>
+                    <option value="Utawala">Utawala</option>
                     <!-- Add more locations here -->
                 </select>
             </div>
             <div class="form-group">
                 <label for="extra-info">Other details</label>
-                <input type="text" id="extra-info" name="extra-info" required>
+                <input type="text" id="extra-info" name="extra-info" required placeholder="Other location details: e.g. House, floor, room no.">
             </div>
+
             <h2>Product Payment</h2>
             <p>select payment option</p>
             <div class="notification">
