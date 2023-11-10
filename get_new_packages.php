@@ -20,8 +20,8 @@ $userId = $_SESSION['userId']; // Get the user ID of the logged-in user
 // Query to retrieve new packages for the logged-in user with "Pending Approval" status
 $sql = "SELECT ap.customerName, ap.phoneNumber, ap.sendingFrom, ap.packageColor, ap.sendingTo, ap.status
         FROM agentpackages AS ap
-        JOIN users AS u ON ap.userId = u.userId
-        WHERE ap.userId = ? AND ap.status = 'Pending Approval'";
+        JOIN users AS u ON u.userId = u.userId
+        WHERE u.userId = ? AND ap.status = 'Pending Approval'";
         
 
 // Prepare and execute the query
@@ -51,5 +51,5 @@ if (!$result) {
     header('Content-Type: application/json');
     echo json_encode($packages);
 }
-
+var_dump($sql)
 ?>

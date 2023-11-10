@@ -1,9 +1,9 @@
 <?php
 include 'connection.php';
-// Check if the packageId is set and not empty
-if (isset($_POST['packageId']) && !empty($_POST['packageId'])) {
-    // Get the packageId from the POST data
-    $packageId = $_POST['packageId'];
+// Check if the ApID is set and not empty
+if (isset($_POST['ApID']) && !empty($_POST['ApID'])) {
+    // Get the ApID from the POST data
+    $ApID = $_POST['ApID'];
 
     // Create a new MySQLi connection
     $conn = new mysqli($server, $user, $pass, $database);
@@ -14,31 +14,32 @@ if (isset($_POST['packageId']) && !empty($_POST['packageId'])) {
     }
 
     // Define the new status
-    $newStatus = "In Transit";
+    $newStatus = "Dropped";
 
     // Prepare an SQL UPDATE statement
-    $sql = "UPDATE agentpackages SET status = ? WHERE packageId = ?";
+    $sql = "UPDATE agentpackages SET status = ? WHERE ApID = ?";
+   
 
     // Create a prepared statement
     $stmt = $conn->prepare($sql);
 
     // Bind parameters and execute the statement
-    $stmt->bind_param("ss", $newStatus, $packageId);
+    $stmt->bind_param("ss", $newStatus, $ApID);
 
     // Execute the statement
     if ($stmt->execute()) {
         // The update was successful
-        echo "Success: Package has been approved and status updated to 'Dropped'.";
+        echo "Success: Package has been dropped and status updated to 'dropped'.";
     } else {
         // Error occurred during the update
-        echo "Error: Package approval failed. " . $stmt->error;
+        echo "Error: Package drop not updated . " . $stmt->error;
     }
 
     // Close the statement and the database connection
     $stmt->close();
     $conn->close();
 } else {
-    // PackageId was not provided in the POST data
+    // ApID was not provided in the POST data
     echo "Error: Invalid data provided.";
 }
 ?>

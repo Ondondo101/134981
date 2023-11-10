@@ -1,5 +1,4 @@
 <?php
-
 require 'vendor/autoload.php';
 include 'connection.php';
 
@@ -10,40 +9,40 @@ error_reporting(0);
 session_start();
 
 if (isset($_SESSION['name'])) {
-    header("Location: index.php");
+    header("Location: welcome.php");
 }
 
 if (isset($_POST['submit'])) {
-	$username = $_POST['name'];
-	$email = $_POST['email'];
-	$password = md5($_POST['password']);
-	$cpassword = md5($_POST['cpassword']);
+    $username = $_POST['name'];
+    $email = $_POST['email'];
+    $password = md5($_POST['password']);
+    $cpassword = md5($_POST['cpassword']);
+    $role = $_POST['role']; // Added line to get user role
 
-	if ($password == $cpassword) {
-		$sql = "SELECT * FROM users WHERE email='$email'";
-		$result = mysqli_query($conn, $sql);
-		if (!$result->num_rows > 0) {
-			$sql = "INSERT INTO users (name, email, password)
-					VALUES ('$username', '$email', '$password')";
-			$result = mysqli_query($conn, $sql);
-			if ($result) {
-				echo "<script>alert('Wow! User Registration Completed.')</script>";
-				$username = "";
-				$email = "";
-				$_POST['password'] = "";
-				$_POST['cpassword'] = "";
-			} else {
-				echo "<script>alert('Woops! Something Wrong Went.')</script>";
-			}
-		} else {
-			echo "<script>alert('Woops! Email Already Exists.')</script>";
-		}
-		
-	} else {
-		echo "<script>alert('Password Not Matched.')</script>";
-	}
+    if ($password == $cpassword) {
+        $sql = "SELECT * FROM users WHERE email='$email'";
+        $result = mysqli_query($conn, $sql);
+        if (!$result->num_rows > 0) {
+            $sql = "INSERT INTO users (name, email, password, role)
+                    VALUES ('$username', '$email', '$password', '$role')";
+            $result = mysqli_query($conn, $sql);
+            if ($result) {
+                echo "<script>alert('Wow! User Registration Completed.')</script>";
+                $username = "";
+                $email = "";
+                $_POST['password'] = "";
+                $_POST['cpassword'] = "";
+            } else {
+                echo "<script>alert('Woops! Something Wrong Went.')</script>";
+            }
+        } else {
+            echo "<script>alert('Woops! Email Already Exists.')</script>";
+        }
+        
+    } else {
+        echo "<script>alert('Password Not Matched.')</script>";
+    }
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -104,14 +103,20 @@ if (isset($_POST['submit'])) {
 				<input type="password" placeholder="Confirm Password" name="cpassword" value="<?php echo $_POST['cpassword']; ?>" required>
 			</div>
 			<div class="input-group">
+                <label for="role">Select Role:</label>
+                <select id="role" name="role" required>
+                    <option value="admin">Admin</option>
+                    <option value="agent">Agent</option>
+                    <option value="vendor">Vendor</option>
+                    <option value="rider">Rider</option>
+                </select>
+			<div class="input-group">
 				<button name="submit" class="btn">Register</button>
 			</div>
 			<p class="login-register-text">Have an account? <a href="Login.php">Login Here</a>.</p>
+			
 		</form>
 	</div>
 </body>
- 
-<footer>
-        <p>&copy; 2023 Logistics & Courier</p>
-    </footer>
+
 </html>

@@ -8,24 +8,42 @@ session_start();
 
 error_reporting(0);
 
-
 if (isset($_SESSION['name'])) {
     header("Location: welcome.php");
 }
 
 if (isset($_POST['submit'])) {
-	$email = $_POST['email'];
-	$password = md5($_POST['password']);
+    $email = $_POST['email'];
+    $password = md5($_POST['password']);
 
-	$sql = "SELECT * FROM users WHERE email='$email' AND password='$password'";
-	$result = mysqli_query($conn, $sql);
-	if ($result->num_rows > 0) {
-		$row = mysqli_fetch_assoc($result);
-		$_SESSION['name'] = $row['name'];
-		header("Location: welcome.php");
-	} else {
-		echo "<script>alert('Woops! Email or Password is Wrong.')</script>";
-	}
+    $sql = "SELECT * FROM users WHERE email='$email' AND password='$password'";
+    $result = mysqli_query($conn, $sql);
+    if ($result->num_rows > 0) {
+        $row = mysqli_fetch_assoc($result);
+        $_SESSION['name'] = $row['name'];
+        $_SESSION['role'] = $row['role'];
+        
+        // Redirect based on user role
+        switch ($_SESSION['role']) {
+            case 'admin':
+                header("Location: admin_dashboard.php");
+                break;
+            case 'agent':
+                header("Location: agentDashboard.php");
+                break;
+            case 'vendor':
+                header("Location:welcome.php");
+                break;
+            case 'rider':
+                header("Location: rider_dashboard.php");
+                break;
+            default:
+                header("Location: welcome.php");
+                break;
+        }
+    } else {
+        echo "<script>alert('Woops! Email or Password is Wrong.')</script>";
+    }
 }
 ?>
 

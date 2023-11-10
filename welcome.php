@@ -52,7 +52,7 @@ if (!isset($_SESSION['name'])) {
         </nav>
     </header>
     <?php echo "<h1>Welcome " . $_SESSION['name'] . "</h1>"; ?>
-        <div id="map"></div>
+        
     <script>
 
     function updatePackageCount(status, elementId) {

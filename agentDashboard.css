@@ -1,46 +1,234 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+
+}
+
+
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
     margin: 0;
     padding: 0;
 }
-
-.agent-container {
-    max-width: 800px;
-    margin: 20px auto;
-    background-color: #fff;
-    padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-}
-
-.section {
-    margin-top: 20px;
-}
-
-.package-list {
-    border: 1px solid #ddd;
-    padding: 10px;
-    border-radius: 5px;
-}
-
-.package-item {
-    margin: 10px 0;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-}
-
-.approve-button, .dispatch-button, .send-notification-button {
-    background-color: #007bff;
+header {
+    background: linear-gradient(to right, rgba(255,0,0,0), rgba(133, 19, 19, 0.4));
     color: #fff;
+    padding: 0rem 0;
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+.logo img {
+    height: 100px;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+
+.nav-links li a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s;
+}
+
+.nav-links li a:hover {
+    color: #ff9900;
+}
+/* Style the back button */
+.backButton {
+
+    color: #fff; /* White text color */
+    padding: 10px 15px;
     border: none;
-    padding: 5px 10px;
+    border-radius: 5px;
     cursor: pointer;
 }
 
-input[type="text"], input[type="email"], textarea {
-    width: 100%;
-    padding: 5px;
+/* On hover, change the background color */
+.backButton:hover {
+    color: #ff6600;
+}
+
+/* Style the Font Awesome icon */
+.backButton i {
+    margin-right: 5px; /* Add some space between the icon and text */
+}
+
+
+/* Style the package tracking form */
+.package-tracking-form {
+    display: flex;
+    align-items: center;
+    margin: 20px 0;
+}
+
+.package-tracking-form label {
+    font-size: 18px;
+    margin-right: 10px;
+}
+
+.package-tracking-form input[type="text"] {
+    width: 300px;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    outline: none;
+}
+
+.package-tracking-form button {
+    padding: 10px 20px;
+    background-color: #ff9900;
+    color: #fff;
+    font-size: 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.package-tracking-form button:hover {
+    background-color: #ff6600;
+}
+
+/* Style the tracking result */
+.tracking-result {
+    margin-top: 20px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.tracking-result p {
+    font-size: 18px;
     margin: 5px 0;
 }
+
+
+
+.container {
+    width: 80%;
+    margin: auto;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+/* Table Styles */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 30px;
+    background-color: #fff;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+
+th {
+    background-color: #4CAF50;
+    color: white;
+}
+
+/* Button Styles */
+button {
+    padding: 8px 16px;
+    cursor: pointer;
+    border: none;
+    color: #fff;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    margin: 4px 2px;
+}
+
+.agentapprove-btn {
+    background-color: #4CAF50;
+}
+
+.agentdispatch-btn {
+    background-color: #2196F3;
+}
+
+.agentdelivered-btn {
+    background-color: #f44336;
+}
+
+.agentundelivered-btn {
+    background-color: #ff9800;
+}
+.countyapprove-btn {
+    background-color: #4CAF50;
+}
+
+.countydispatch-btn {
+    background-color: #2196F3;
+}
+
+.countydelivered-btn {
+    background-color: #f44336;
+}
+
+.countyundelivered-btn {
+    background-color: #ff9800;
+}
+
+/* Optional: Add hover effect */
+button:hover {
+    opacity: 0.8;
+}
+
+/* Optional: Responsive table */
+@media screen and (max-width: 600px) {
+    table {
+        border: 0;
+    }
+
+    table thead {
+        display: none;
+    }
+
+    table tr {
+        margin-bottom: 20px;
+        display: block;
+        border: 1px solid #ddd;
+    }
+
+    table td {
+        display: block;
+        text-align: right;
+        border: none;
+    }
+
+    table td::before {
+        content: attr(data-label);
+        float: left;
+        font-weight: bold;
+    }
+}
+
