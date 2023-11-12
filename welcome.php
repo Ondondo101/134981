@@ -54,27 +54,26 @@ if (!isset($_SESSION['name'])) {
     <?php echo "<h1>Welcome " . $_SESSION['name'] . "</h1>"; ?>
         
     <script>
-
     function updatePackageCount(status, elementId) {
-            const xhr = new XMLHttpRequest();
-            xhr.open('GET', `get_${status}_packages.php`, true);
-            xhr.onreadystatechange = function () {
-                if (xhr.readyState === 4 && xhr.status === 200) {
-                    const data = JSON.parse(xhr.responseText);
-                    document.getElementById(elementId).textContent = data.length; // Update the count
-                }
-            };
-            xhr.send();
-        }
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', `get_${status}_packages.php`, true);
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                const data = JSON.parse(xhr.responseText);
+                document.getElementById(elementId).textContent = data.length; // Update the count
+            }
+        };
+        xhr.send();
+    }
 
-        // Usage: Update counts for each status
-        updatePackageCount('new', 'newPackagesCount');
-        updatePackageCount('Pending Approval', 'pendingPackagesCount');
-        updatePackageCount('Dropped', 'droppedPackagesCount');
-        updatePackageCount('In Transit', 'transitPackagesCount');
-        // Repeat for other statuses
+    // Usage: Update counts for each status
+    updatePackageCount('new', 'newPackagesCount');
+    updatePackageCount('Pending Approval', 'pendingPackagesCount');
+    updatePackageCount('Dropped', 'droppedPackagesCount');
+    updatePackageCount('In Transit', 'transitPackagesCount');
+    // Repeat for other statuses
+</script>
 
-    </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap" async defer></script>
 
     <body> 

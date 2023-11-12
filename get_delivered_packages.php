@@ -5,7 +5,7 @@ session_start(); // Start the session if not already started
 include 'connection.php';
 
 // Check if the user is logged in
-if (!isset($_SESSION['user_id'])) {
+if (!isset($_SESSION['userId'])) {
     // Redirect or handle unauthorized access
     // For example, you can redirect to a login page
     header('Location: login.php');
@@ -15,7 +15,7 @@ if (!isset($_SESSION['user_id'])) {
 // Assuming you have a database connection, you can proceed to fetch the new package data
 // For demonstration purposes, let's assume you have an "AgentPackages" table
 
-$userId = $_SESSION['user_id']; // Get the user ID of the logged-in user
+$userId = $_SESSION['userId']; // Get the user ID of the logged-in user
 
 // Query to retrieve new packages for the logged-in user with "Pending Approval" status
 $sql = "SELECT customerName, phoneNumber, sendingFrom, packageColor, sendingTo, status FROM agentPackages WHERE user_id = ? AND status = 'Delivered'";
