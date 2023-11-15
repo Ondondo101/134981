@@ -14,39 +14,51 @@ if (isset($_SESSION['name'])) {
 
 if (isset($_POST['submit'])) {
     $email = $_POST['email'];
-    $password = md5($_POST['password']);
+    $password = $_POST['password'];
 
-    $sql = "SELECT * FROM users WHERE email='$email' AND password='$password'";
-    $result = mysqli_query($conn, $sql);
+    $sql = "SELECT * FROM users WHERE email = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
     if ($result->num_rows > 0) {
-        $row = mysqli_fetch_assoc($result);
-        $_SESSION['name'] = $row['name'];
-        $_SESSION['role'] = $row['role'];
-        
-        // Redirect based on user role
-        switch ($_SESSION['role']) {
-            case 'admin':
-                header("Location: admin_dashboard.php");
-                break;
-            case 'agent':
-                header("Location: agentDashboard.php");
-                break;
-            case 'vendor':
-                header("Location:welcome.php");
-                break;
-            case 'rider':
-                header("Location: rider_dashboard.php");
-                break;
-            default:
-                header("Location: welcome.php");
-                break;
+        $row = $result->fetch_assoc();
+
+        // Use password_verify to check if entered password matches hashed password
+        if (password_verify($password, $row['password'])) {
+            $_SESSION['name'] = $row['name'];
+            $_SESSION['role'] = $row['role'];
+
+            // Redirect based on user role
+            switch ($_SESSION['role']) {
+                case 'admin':
+                    header("Location: admin_dashboard.php");
+                    break;
+                case 'agent':
+                    header("Location: agentDashboard.php");
+                    break;
+                case 'vendor':
+                    header("Location: welcome.php");
+                    break;
+                case 'courier':
+                    header("Location: courierDashboard.php");
+                    break;
+                default:
+                    header("Location: welcome.php");
+                    break;
+            }
+        } else {
+            echo "<script>alert('Incorrect Password.')</script>";
         }
     } else {
-        echo "<script>alert('Woops! Email or Password is Wrong.')</script>";
+        echo "<script>alert('User not found.')</script>";
     }
+
+    $stmt->close();
+    $conn->close();
 }
 ?>
-
 
 <!DOCTYPE html>
 <html>
@@ -86,7 +98,7 @@ if (isset($_POST['submit'])) {
                 
                 <li><a href="landing.html">Home</a></li>
                 
-                <li><a href="contact.php">Contact</a></li>
+                <li><a href="Signup.php">Sign Up </a></li>
             </ul>
         </nav>
     </header>

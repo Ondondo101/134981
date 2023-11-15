@@ -1,4 +1,11 @@
 <?php
+include 'connection.php'; // Include the database connection file
+session_start();
+
+if (!isset($_SESSION['name'])) {
+    header("Location: login.php");
+}
+
 // Initialize variables for form fields
 $customerName = $phoneNumber = $sendingFrom = $packageColor = $sendingTo = "";
 

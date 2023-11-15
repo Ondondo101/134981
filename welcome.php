@@ -71,6 +71,8 @@ if (!isset($_SESSION['name'])) {
     updatePackageCount('Pending Approval', 'pendingPackagesCount');
     updatePackageCount('Dropped', 'droppedPackagesCount');
     updatePackageCount('In Transit', 'transitPackagesCount');
+    updatePackageCount('Delivered', 'deliveredPackagesCount');
+    updatePackageCount('Undelivered', 'undeliveredPackagesCount');
     // Repeat for other statuses
 </script>
 

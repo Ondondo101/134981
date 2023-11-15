@@ -15,16 +15,19 @@ if (isset($_SESSION['name'])) {
 if (isset($_POST['submit'])) {
     $username = $_POST['name'];
     $email = $_POST['email'];
-    $password = md5($_POST['password']);
-    $cpassword = md5($_POST['cpassword']);
+    $password = $_POST['password'];
+    $cpassword = $_POST['cpassword'];
     $role = $_POST['role']; // Added line to get user role
+
+    // Hash the password
+    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
     if ($password == $cpassword) {
         $sql = "SELECT * FROM users WHERE email='$email'";
         $result = mysqli_query($conn, $sql);
         if (!$result->num_rows > 0) {
             $sql = "INSERT INTO users (name, email, password, role)
-                    VALUES ('$username', '$email', '$password', '$role')";
+                    VALUES ('$username', '$email', '$hashedPassword', '$role')";
             $result = mysqli_query($conn, $sql);
             if ($result) {
                 echo "<script>alert('Wow! User Registration Completed.')</script>";
@@ -38,12 +41,13 @@ if (isset($_POST['submit'])) {
         } else {
             echo "<script>alert('Woops! Email Already Exists.')</script>";
         }
-        
     } else {
         echo "<script>alert('Password Not Matched.')</script>";
     }
 }
 ?>
+
+
 
 <!DOCTYPE html>
 <html>
@@ -81,7 +85,7 @@ if (isset($_POST['submit'])) {
                 
                 <li><a href="landing.html">Home</a></li>
             
-                <li><a href="contact.php">Contact</a></li>
+                <li><a href="login.php">Login</a></li>
             </ul>
         </nav>
     </header>
@@ -108,7 +112,7 @@ if (isset($_POST['submit'])) {
                     <option value="admin">Admin</option>
                     <option value="agent">Agent</option>
                     <option value="vendor">Vendor</option>
-                    <option value="rider">Rider</option>
+                    <option value="courier">Courier</option>
                 </select>
 			<div class="input-group">
 				<button name="submit" class="btn">Register</button>

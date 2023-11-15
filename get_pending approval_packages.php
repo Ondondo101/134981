@@ -7,14 +7,14 @@ if (!isset($_SESSION['name'])) {
     exit();
 }
 
-$userName = $_SESSION['name'];
+$username = $_SESSION['name'];
 
 $sql = "SELECT customerName, phoneNumber, sendingFrom, packageColor, sendingTo, status
         FROM agentPackages
-        WHERE customerName = ? AND status = 'Pending Approval'";
+        WHERE username = ? AND status = 'Pending Approval'";
 
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("s", $name);
+$stmt->bind_param("s", $username);
 $stmt->execute();
 $result = $stmt->get_result();
 
