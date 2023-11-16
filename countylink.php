@@ -14,30 +14,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Get the values from the form
     $customerName = $_POST["customerName"];
     $phoneNumber = $_POST["phoneNumber"];
-    $sendingFrom = $_POST["sendingFrom"];
+    $sendingFrom = $_POST["agentStore"];
     $packageColor = $_POST["packageColor"];
-    $sendingTo = $_POST["sendingTo"];
+    $sendingTo = $_POST["AgentStore"];
 
-    // Database connection
-    $conn = mysqli_connect($server, $user, $pass, $database);
+   // Retrieve the username from the session
+   $username = $_SESSION['name'];
 
-    // Check if the connection was successful
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    }
+   // Database connection
+   $conn = mysqli_connect($server, $user, $pass, $database);
 
-    // Insert the package data into the database with a "Pending Approval" status
-    $sql = "INSERT INTO countypackages (customerName, phoneNumber, sendingFrom, packageColor, sendingTo, status) VALUES ('$customerName', '$phoneNumber', '$sendingFrom', '$packageColor', '$sendingTo', 'Pending Approval')";
+   // Check if the connection was successful
+   if ($conn->connect_error) {
+       die("Connection failed: " . $conn->connect_error);
+   }
 
-    if ($conn->query($sql) === TRUE) {
-        // Data inserted successfully
-        echo "Package submitted successfully.";
-    } else {
-        // Error handling
-        echo "Error: " . $sql . "<br>" . $conn->error;
-    }
+   // Insert the package data into the database with a "Pending Approval" status
+   $sql = "INSERT INTO countypackages (customerName, phoneNumber, sendingFrom, packageColor, sendingTo, status, username) VALUES ('$customerName', '$phoneNumber', '$sendingFrom', '$packageColor', '$sendingTo', 'Pending Approval', '$username')";
 
-    $conn->close(); // Close the database connection
+   if ($conn->query($sql) === TRUE) {
+       // Data inserted successfully
+       echo "Package submitted successfully.";
+   } else {
+       // Error handling
+       echo "Error: package not submitted " . $sql . "<br>" . $conn->error;
+   }
+
+   $conn->close(); // Close the database connection
 }
 ?>
 

@@ -197,7 +197,21 @@ button {
 .countyundelivered-btn {
     background-color: #ff9800;
 }
+.doorstepapprove-btn {
+    background-color: #4CAF50;
+}
 
+.doorstepdispatch-btn {
+    background-color: #2196F3;
+}
+
+.doorstepdelivered-btn {
+    background-color: #f44336;
+}
+
+.doorstepundelivered-btn {
+    background-color: #ff9800;
+}
 /* Optional: Add hover effect */
 button:hover {
     opacity: 0.8;

@@ -7,30 +7,45 @@ if (!isset($_SESSION['name'])) {
 }
 
 // Initialize variables for form fields
-$customerName = $phoneNumber = $sendingFrom = $packageColor = $sendingTo = "";
+$customerName = $phoneNumber = $sendingFrom= $sendingTo = $extraInfo= "";
 
 // Check if the form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Get the values from the form
     $customerName = $_POST["customerName"];
     $phoneNumber = $_POST["phoneNumber"];
-    $sendingFrom = $_POST["sendingFrom"];
-    $packageColor = $_POST["packageColor"];
+    $sendingFrom = $_POST["agentStore"];
     $sendingTo = $_POST["sendingTo"];
+    $extraInfo = $_POST["extraInfo"];
 
     // Check if all fields are filled
-    if (!empty($customerName) && !empty($phoneNumber) && !empty($sendingFrom) && !empty($packageColor) && !empty($sendingTo)) {
-        // Calculate the total fee
-        $totalFee = 300;
+    if (!empty($customerName) && !empty($phoneNumber)&& !empty($sendingFrom) && !empty($sendingTo) && !empty($extraInfo) ) {
+        // Retrieve the username from the session
+        $username = $_SESSION['name'];
 
-        // Display the total fee
-        echo "Total Fee: Ksh $totalFee";
-    } else {
-        // If any field is empty, display a message
-        echo "Please fill in all the information to calculate the total fee.";
-    }
-}
+        // Calculate the total fee
+        $totalFee = ($_POST['delivery_option'] == 'vendor_pays') ? 300 : 0;
+
+        // Insert the data into the database, including the username
+        $sql = "INSERT INTO doorsteppackages (customerName, phoneNumber, sendingFrom, sendingTo, extraInfo, status, username) VALUES (?, ?, ?, ?, ?, 'Pending Approval', ?)";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("ssssss", $customerName, $phoneNumber, $sendingFrom, $sendingTo, $extraInfo, $username);
+
+
+        if ($stmt->execute()) {
+            // Display the total fee
+            echo "Package submitted successfully";
+        } else {
+            // If the insertion fails, display an error message
+            echo "Error: package not submitted " . $stmt->error;
+        }
+
+        // Close the statement
+        $stmt->close();
+
+}}
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -38,7 +53,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="agent.css">
-    <title>Agent Service</title>
+    <title>Doorstep Service</title>
 </head>
 <body>
 <button id="backButton" class="btn btn-default">
@@ -54,7 +69,71 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         <h2>Doorstep Services</h2>
         <form id="DoorstepForm" method="post">
+            <div class="form-group">
+                <label for="customerName">Customer Name</label>
+                <input type="text" id="customerName" name="customerName" required>
+            </div>
+            <div class="form-group">
+                <label for="phoneNumber">Phone Number</label>
+                <input type="text" id="phoneNumber" name="phoneNumber" required>
+            </div>
+            <h2>Where are you sending from?</h2>
+            <div class="form-group">
+                <label for="sendingFrom"> From location</label>
+                <select id="sendingFrom" name="sendingFrom">
+                        <option value=""></option>
+                        <option value="CBD">CBD</option>
+                        <option value="Umoja">Umoja</option>
+                        <option value="Gikomba">Gikomba</option>
+                        <option value="Utawala">Utawala</option>
+                        <!-- Add more locations here -->
+                    </select>
 
+            <h2>Choose an Agent Store</h2>
+                    <div class="form-group">
+                        <label for="agentStore">Agent Store</label>
+                        <select id="agentStore" name="agentStore">
+                            <!-- Options will be added dynamically based on the selection -->
+                        </select>
+                    </div>
+
+                        <script>
+                            // Get references to the dropdowns
+                            const sendingFromDropdown = document.getElementById('sendingFrom');
+                            const agentStoreDropdown = document.getElementById('agentStore');
+
+                            // Define the agent stores for each location
+                            const agentStores = {
+                                'CBD': ['Platinum plaza', 'Soko House Room 101'],
+                                'Umoja': ['Store A', 'Store B', 'Store C'],
+                                'Gikomba': ['Shop 1', 'Shop 2'],
+                                'Utawala': ['Utawala Store 1', 'Utawala Store 2'],
+                                // Add more locations and stores here
+                            };
+
+                            // Function to update agent store options based on location selection
+                            function updateAgentStores() {
+                                const selectedLocation = sendingFromDropdown.value;
+                                const stores = agentStores[selectedLocation] || [];
+
+                                // Clear existing options
+                                agentStoreDropdown.innerHTML = '';
+
+                                // Add new options
+                                for (const store of stores) {
+                                    const option = document.createElement('option');
+                                    option.value = store;
+                                    option.textContent = store;
+                                    agentStoreDropdown.appendChild(option);
+                                }
+                            }
+
+                            // Add an event listener to update the agent stores when the location changes
+                            sendingFromDropdown.addEventListener('change', updateAgentStores);
+
+                            // Initial call to populate agent stores based on the default location
+                            updateAgentStores();
+                        </script>
             <h2>Where are you sending to?</h2>
             <div class="form-group">
                 <label for="sendingTo"> Select location</label>
@@ -68,8 +147,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </select>
             </div>
             <div class="form-group">
-                <label for="extra-info">Other details</label>
-                <input type="text" id="extra-info" name="extra-info" required placeholder="Other location details: e.g. House, floor, room no.">
+                <label for="extraInfo">Other details</label>
+                <input type="text" id="extraInfo" name="extraInfo" required placeholder="Other location details: e.g. House, floor, room no.">
             </div>
 
             <h2>Product Payment</h2>
@@ -134,6 +213,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 updateDeliveryFee();
             });
         </script>
+        <script>
+                document.addEventListener("DOMContentLoaded", function() {
+                    const form = document.getElementById("DoorstepForm");
+                    let firstClick = true;
+
+                    form.addEventListener("submit", function(event) {
+                        event.preventDefault(); // Prevent the form from submitting
+
+                        if (firstClick) {
+                            // Calculate the delivery fee and display it
+                            const deliveryFee = 250;
+                            const feeContainer = document.querySelector(".total-fee");
+                            feeContainer.textContent = `Total Fee: Ksh ${deliveryFee}`;
+
+                            // Change the button text to "Confirm Submit"
+                            const submitButton = form.querySelector("button[type='submit']");
+                            submitButton.textContent = "Confirm Submit";
+                            
+                            firstClick = false;
+                        } else {
+                            // If it's the second click, submit the form
+                            form.submit();
+                        }
+                    });
+                });
+
+            </script>
 
 
 

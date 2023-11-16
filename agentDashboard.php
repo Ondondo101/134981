@@ -147,6 +147,57 @@ if (!isset($_SESSION['name'])) {
         $mysqli->close();
         ?>
     </table>
+    <table>
+
+        <h1>Doorstep Packages</h1>
+
+        <!-- Table to display County Packages -->
+        <table id="DoorstepPackageTable">
+            <tr>
+                <th>Customer Name</th>
+                <th>Phone Number</th>
+                <th>Sending From</th>
+                <th>Sending To</th>
+                <th>Extra Info</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+            <?php
+            include 'connection.php';
+            $mysqli = new mysqli($server, $user, $pass, $database);
+            if ($mysqli->connect_error) {
+                exit('Could not connect');
+            }
+
+            // Query for County Packages
+            $sqlDoorstep = "SELECT DpId, customerName, phoneNumber, sendingFrom, sendingTo, extraInfo, status FROM doorsteppackages";
+            $resultDoorstep = $mysqli->query($sqlDoorstep);
+
+            if (!$resultDoorstep) {
+                echo "Error: " . $mysqli->error;
+            } else {
+                // Display County Packages
+                if ($resultDoorstep->num_rows > 0) {
+                    while ($row = $resultDoorstep->fetch_assoc()) {
+                        echo "<tr>";
+                        echo "<td>" . $row['customerName'] . "</td>";
+                        echo "<td>" . $row['phoneNumber'] . "</td>";
+                        echo "<td>" . $row['sendingFrom'] . "</td>";
+                        echo "<td>" . $row['sendingTo'] . "</td>";
+                        echo "<td>" . $row['extraInfo'] . "</td>";
+                        echo "<td>" . $row['status'] . "</td>";
+                        echo '<td><button class="doorstepapprove-btn" data-Dp-Id="' . $row['DpId'] . '">Approve</button></td>';
+                        echo '<td><button class="doorstepdispatch-btn" data-Dp-Id="' . $row['DpId'] . '">Dispatch</button></td>';
+                        echo '<td><button class="doorstepdelivered-btn" data-Dp-Id="' . $row['DpId'] . '">Delivered</button></td>';
+                        echo '<td><button class="doorstepundelivered-btn" data-Dp-Id="' . $row['DpId'] . '">Undelivered</button></td>';
+                        echo "</tr>";
+                    }
+                }
+            }
+
+            $mysqli->close();
+            ?>
+    </table>
 
     <script>
         // AJAX to handle package approval
@@ -245,7 +296,7 @@ if (!isset($_SESSION['name'])) {
         function refreshPackageTable() {
             // You can implement the code to fetch and display the updated package data here.
         }
-        // AJAX to handle package approval
+               // AJAX to handle package approval
         const countyapproveButtons = document.querySelectorAll(".countyapprove-btn");
         countyapproveButtons.forEach(button => {
             button.addEventListener('click', function() {
@@ -270,14 +321,14 @@ if (!isset($_SESSION['name'])) {
 
         // AJAX to handle package dispatch
         const countydispatchButtons = document.querySelectorAll(".countydispatch-btn");
-        countydispatchButtons.forEach(button => {
+        countyispatchButtons.forEach(button => {
             button.addEventListener('click', function() {
                 const CpID = this.getAttribute('data-Cp-id');
                 countydispatchPackage(CpID);
             });
         });
 
-        function countydispatchPackage(CpID) {
+        function countydispatchPackage(ApID) {
             // Send an AJAX request to your server to update the status
             const xhr = new XMLHttpRequest();
             xhr.open('POST', 'Cdispatch_package.php', true);
@@ -295,7 +346,7 @@ if (!isset($_SESSION['name'])) {
         const countydeliveredButtons = document.querySelectorAll(".countydelivered-btn");
         countydeliveredButtons.forEach(button => {
             button.addEventListener('click', function() {
-                const CpID = this.getAttribute('data-Cp-id');
+                const ApID = this.getAttribute('data-Cp-id');
                 countydeliveredPackage(CpID);
             });
         });
@@ -318,12 +369,12 @@ if (!isset($_SESSION['name'])) {
         const countyundeliveredButtons = document.querySelectorAll(".countyundelivered-btn");
         countyundeliveredButtons.forEach(button => {
             button.addEventListener('click', function() {
-                const CpID = this.getAttribute('data-Cp-id');
+                const ApID = this.getAttribute('data-Cp-id');
                 countyundeliveredPackage(CpID);
             });
         });
 
-        function countyundeliveredPackage(CpID) {
+        function countyundeliveredPackage(ApID) {
             // Send an AJAX request to your server to update the status
             const xhr = new XMLHttpRequest();
             xhr.open('POST', 'Cundelivered_package.php', true);
@@ -335,6 +386,103 @@ if (!isset($_SESSION['name'])) {
                 }
             };
             xhr.send(`CpID=${CpID}`);
+        }
+
+        // Function to refresh the package table
+        function refreshPackageTable() {
+            // You can implement the code to fetch and display the updated package data here.
+        }
+       
+        const doorstepapproveButtons = document.querySelectorAll(".doorstepapprove-btn");
+        doorstepapproveButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const DpId = this.getAttribute('data-Dp-Id');
+                doorstepapprovePackage(DpId);
+            });
+        });
+
+        function doorstepapprovePackage(DpId) {
+            // Send an AJAX request to your server to update the status
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', 'Dapprove_package.php', true);
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    // Refresh the table after approval
+                    refreshPackageTable();
+                }
+            };
+            xhr.send(`DpId=${DpId}`);
+        }
+
+
+        // AJAX to handle package dispatch
+        const doorstepdispatchButtons = document.querySelectorAll(".doorstepdispatch-btn");
+        doorstepdispatchButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const DpId = this.getAttribute('data-Dp-Id');
+                doorstepdispatchPackage(DpId);
+            });
+        });
+
+        function doorstepdispatchPackage(DpId) {
+            // Send an AJAX request to your server to update the status
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', 'Ddispatch_package.php', true);
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    // Refresh the table after dispatch
+                    refreshPackageTable();
+                }
+            };
+            xhr.send(`DpId=${DpId}`);
+        }
+
+        // AJAX to handle delivered packages
+        const doorstepdeliveredButtons = document.querySelectorAll(".doorstepdelivered-btn");
+        doorstepdeliveredButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const DpId = this.getAttribute('data-Dp-Id');
+                doorstepdeliveredPackage(DpId);
+            });
+        });
+
+        function doorstepdeliveredPackage(DpId) {
+            // Send an AJAX request to your server to update the status
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', 'Ddelivered_package.php', true);
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    // Refresh the table after delivered
+                    refreshPackageTable();
+                }
+            };
+            xhr.send(`DpId=${DpId}`);
+        }
+
+        // AJAX to handle undelivered packages 
+        const doorstepundeliveredButtons = document.querySelectorAll(".doorstepundelivered-btn");
+        doorstepundeliveredButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const DpId = this.getAttribute('data-Dp-Id');
+                doorstepundeliveredPackage(DpId);
+            });
+        });
+
+        function doorstepundeliveredPackage(DpId) {
+            // Send an AJAX request to your server to update the status
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', 'Dundelivered_package.php', true);
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    // Refresh the table after undelivered
+                    refreshPackageTable();
+                }
+            };
+            xhr.send(`DpId=${DpId}`);
         }
 
         // Function to refresh the package table

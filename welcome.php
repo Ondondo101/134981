@@ -43,6 +43,7 @@ if (!isset($_SESSION['name'])) {
             </form>
 
             <ul class="nav-links">
+                <li><a href="Packages.php"> My Packages</a></li>
                 <li><a href="profile.php"> Account</a></li>
                 <li><a href="logout.php">Logout</a></li>
                 
@@ -115,6 +116,7 @@ if (!isset($_SESSION['name'])) {
                     <div class="vendor-icon">
                         <img src="new packages.png">
                     </div>
+                
                     <div class="vendor-label">
                         New Packages
                     </div>
