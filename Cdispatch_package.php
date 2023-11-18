@@ -29,10 +29,10 @@ if (isset($_POST['CpID']) && !empty($_POST['CpID'])) {
     // Execute the statement
     if ($stmt->execute()) {
         // The update was successful
-        echo "Success: Package has been dispatched and status updated to 'In  Transit'.";
+        echo "Success: Package has been dispatched and status updated to 'In Transit'.";
     } else {
         // Error occurred during the update
-        echo "Error: Package dispatch not updated . " . $stmt->error;
+        echo "Error: Package not updated . " . $stmt->error;
     }
 
     // Close the statement and the database connection

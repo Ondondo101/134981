@@ -15,7 +15,7 @@ if (!isset($_SESSION['name'])) {
     
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
-<link rel="stylesheet" type="text/css" href="agentDashboard.css">
+<link rel="stylesheet" type="text/css" href="ADashboard.css">
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 
@@ -97,111 +97,9 @@ if (!isset($_SESSION['name'])) {
         $mysqli->close();
         ?>
     </table>
-
-    <h1>County Packages</h1>
-
-    <!-- Table to display County Packages -->
-    <table id="countyPackageTable">
-        <tr>
-            <th>Customer Name</th>
-            <th>Phone Number</th>
-            <th>Sending From</th>
-            <th>Package Color</th>
-            <th>Sending To</th>
-            <th>Status</th>
-            <th>Action</th>
-        </tr>
-        <?php
-        include 'connection.php';
-        $mysqli = new mysqli($server, $user, $pass, $database);
-        if ($mysqli->connect_error) {
-            exit('Could not connect');
-        }
-
-        // Query for County Packages
-        $sqlCounty = "SELECT CpID, customerName, phoneNumber, sendingFrom, packageColor, sendingTo, status FROM countypackages";
-        $resultCounty = $mysqli->query($sqlCounty);
-
-        if (!$resultCounty) {
-            echo "Error: " . $mysqli->error;
-        } else {
-            // Display County Packages
-            if ($resultCounty->num_rows > 0) {
-                while ($row = $resultCounty->fetch_assoc()) {
-                    echo "<tr>";
-                    echo "<td>" . $row['customerName'] . "</td>";
-                    echo "<td>" . $row['phoneNumber'] . "</td>";
-                    echo "<td>" . $row['sendingFrom'] . "</td>";
-                    echo "<td>" . $row['packageColor'] . "</td>";
-                    echo "<td>" . $row['sendingTo'] . "</td>";
-                    echo "<td>" . $row['status'] . "</td>";
-                    echo '<td><button class="countyapprove-btn" data-Cp-id="' . $row['CpID'] . '">Approve</button></td>';
-                    echo '<td><button class="countydispatch-btn" data-Cp-id="' . $row['CpID'] . '">Dispatch</button></td>';
-                    echo '<td><button class="countydelivered-btn" data-Cp-id="' . $row['CpID'] . '">Delivered</button></td>';
-                    echo '<td><button class="countyundelivered-btn" data-Cp-id="' . $row['CpID'] . '">Undelivered</button></td>';
-                    echo "</tr>";
-                }
-            }
-        }
-
-        $mysqli->close();
-        ?>
-    </table>
-    <table>
-
-        <h1>Doorstep Packages</h1>
-
-        <!-- Table to display County Packages -->
-        <table id="DoorstepPackageTable">
-            <tr>
-                <th>Customer Name</th>
-                <th>Phone Number</th>
-                <th>Sending From</th>
-                <th>Sending To</th>
-                <th>Extra Info</th>
-                <th>Status</th>
-                <th>Action</th>
-            </tr>
-            <?php
-            include 'connection.php';
-            $mysqli = new mysqli($server, $user, $pass, $database);
-            if ($mysqli->connect_error) {
-                exit('Could not connect');
-            }
-
-            // Query for County Packages
-            $sqlDoorstep = "SELECT DpId, customerName, phoneNumber, sendingFrom, sendingTo, extraInfo, status FROM doorsteppackages";
-            $resultDoorstep = $mysqli->query($sqlDoorstep);
-
-            if (!$resultDoorstep) {
-                echo "Error: " . $mysqli->error;
-            } else {
-                // Display County Packages
-                if ($resultDoorstep->num_rows > 0) {
-                    while ($row = $resultDoorstep->fetch_assoc()) {
-                        echo "<tr>";
-                        echo "<td>" . $row['customerName'] . "</td>";
-                        echo "<td>" . $row['phoneNumber'] . "</td>";
-                        echo "<td>" . $row['sendingFrom'] . "</td>";
-                        echo "<td>" . $row['sendingTo'] . "</td>";
-                        echo "<td>" . $row['extraInfo'] . "</td>";
-                        echo "<td>" . $row['status'] . "</td>";
-                        echo '<td><button class="doorstepapprove-btn" data-Dp-Id="' . $row['DpId'] . '">Approve</button></td>';
-                        echo '<td><button class="doorstepdispatch-btn" data-Dp-Id="' . $row['DpId'] . '">Dispatch</button></td>';
-                        echo '<td><button class="doorstepdelivered-btn" data-Dp-Id="' . $row['DpId'] . '">Delivered</button></td>';
-                        echo '<td><button class="doorstepundelivered-btn" data-Dp-Id="' . $row['DpId'] . '">Undelivered</button></td>';
-                        echo "</tr>";
-                    }
-                }
-            }
-
-            $mysqli->close();
-            ?>
-    </table>
-
     <script>
-        // AJAX to handle package approval
-        const agentapproveButtons = document.querySelectorAll(".agentapprove-btn");
+                // AJAX to handle package approval
+                const agentapproveButtons = document.querySelectorAll(".agentapprove-btn");
         agentapproveButtons.forEach(button => {
             button.addEventListener('click', function() {
                 const ApID = this.getAttribute('data-Ap-id');
@@ -296,102 +194,209 @@ if (!isset($_SESSION['name'])) {
         function refreshPackageTable() {
             // You can implement the code to fetch and display the updated package data here.
         }
-               // AJAX to handle package approval
-        const countyapproveButtons = document.querySelectorAll(".countyapprove-btn");
-        countyapproveButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                const CpID = this.getAttribute('data-Cp-id');
-                countyapprovePackage(CpID);
-            });
-        });
+    </script>
 
-        function countyapprovePackage(CpID) {
-            // Send an AJAX request to your server to update the status
-            const xhr = new XMLHttpRequest();
-            xhr.open('POST', 'Capprove_package.php', true);
-            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-            xhr.onload = function () {
-                if (xhr.status === 200) {
-                    // Refresh the table after approval
-                    refreshPackageTable();
+    <h1>County Packages</h1>
+
+    <!-- Table to display County Packages -->
+    <table id="countyPackageTable">
+        <tr>
+            <th>Customer Name</th>
+            <th>Phone Number</th>
+            <th>Sending From</th>
+            <th>Package Color</th>
+            <th>Sending To</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+        <?php
+        include 'connection.php';
+        $mysqli = new mysqli($server, $user, $pass, $database);
+        if ($mysqli->connect_error) {
+            exit('Could not connect');
+        }
+
+        // Query for County Packages
+        $sqlCounty = "SELECT CpID, customerName, phoneNumber, sendingFrom, packageColor, sendingTo, status FROM countypackages";
+        $resultCounty = $mysqli->query($sqlCounty);
+
+        if (!$resultCounty) {
+            echo "Error: " . $mysqli->error;
+        } else {
+            // Display County Packages
+            if ($resultCounty->num_rows > 0) {
+                while ($row = $resultCounty->fetch_assoc()) {
+                    echo "<tr>";
+                    echo "<td>" . $row['customerName'] . "</td>";
+                    echo "<td>" . $row['phoneNumber'] . "</td>";
+                    echo "<td>" . $row['sendingFrom'] . "</td>";
+                    echo "<td>" . $row['packageColor'] . "</td>";
+                    echo "<td>" . $row['sendingTo'] . "</td>";
+                    echo "<td>" . $row['status'] . "</td>";
+                    echo '<td><button class="countyapprove-btn" data-Cp-id="' . $row['CpID'] . '">Approve</button></td>';
+                    echo '<td><button class="countydispatch-btn" data-Cp-id="' . $row['CpID'] . '">Dispatch</button></td>';
+                    echo '<td><button class="countydelivered-btn" data-Cp-id="' . $row['CpID'] . '">Delivered</button></td>';
+                    echo '<td><button class="countyundelivered-btn" data-Cp-id="' . $row['CpID'] . '">Undelivered</button></td>';
+                    echo "</tr>";
                 }
-            };
-            xhr.send(`CpID=${CpID}`);
+            }
         }
 
-        // AJAX to handle package dispatch
-        const countydispatchButtons = document.querySelectorAll(".countydispatch-btn");
-        countyispatchButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                const CpID = this.getAttribute('data-Cp-id');
-                countydispatchPackage(CpID);
-            });
-        });
+        $mysqli->close();
+        ?>
+    </table>
+    <script>
+       
+       const countyapproveButtons = document.querySelectorAll(".countyapprove-btn");
+       countyapproveButtons.forEach(button => {
+           button.addEventListener('click', function() {
+               const CpID = this.getAttribute('data-Cp-id');
+               countyapprovePackage(CpID);
+           });
+       });
 
-        function countydispatchPackage(ApID) {
-            // Send an AJAX request to your server to update the status
-            const xhr = new XMLHttpRequest();
-            xhr.open('POST', 'Cdispatch_package.php', true);
-            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-            xhr.onload = function () {
-                if (xhr.status === 200) {
-                    // Refresh the table after dispatch
-                    refreshPackageTable();
+       function countyapprovePackage(CpID) {
+           // Send an AJAX request to your server to update the status
+           const xhr = new XMLHttpRequest();
+           xhr.open('POST', 'Capprove_package.php', true);
+           xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+           xhr.onload = function () {
+               if (xhr.status === 200) {
+                   // Refresh the table after approval
+                   refreshPackageTable();
+               }
+           };
+           xhr.send(`CpID=${CpID}`);
+       }
+
+
+       // AJAX to handle package dispatch
+       const countydispatchButtons = document.querySelectorAll(".countydispatch-btn");
+       countydispatchButtons.forEach(button => {
+           button.addEventListener('click', function() {
+               const CpID = this.getAttribute('data-Cp-id');
+               countydispatchPackage(CpID);
+           });
+       });
+
+       function countydispatchPackage(CpID) {
+           // Send an AJAX request to your server to update the status
+           const xhr = new XMLHttpRequest();
+           xhr.open('POST', 'Cdispatch_package.php', true);
+           xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+           xhr.onload = function () {
+               if (xhr.status === 200) {
+                   // Refresh the table after dispatch
+                   refreshPackageTable();
+               }
+           };
+           xhr.send(`CpID=${CpID}`);
+       }
+
+       // AJAX to handle delivered packages
+       const countydeliveredButtons = document.querySelectorAll(".countydelivered-btn");
+       countydeliveredButtons.forEach(button => {
+           button.addEventListener('click', function() {
+               const CpID = this.getAttribute('data-Cp-id');
+               countydeliveredPackage(CpID);
+           });
+       });
+
+       function countydeliveredPackage(CpID) {
+           // Send an AJAX request to your server to update the status
+           const xhr = new XMLHttpRequest();
+           xhr.open('POST', 'Cdelivered_package.php', true);
+           xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+           xhr.onload = function () {
+               if (xhr.status === 200) {
+                   // Refresh the table after delivered
+                   refreshPackageTable();
+               }
+           };
+           xhr.send(`CpID=${CpID}`);
+       }
+
+       // AJAX to handle undelivered packages 
+       const countyundeliveredButtons = document.querySelectorAll(".countyundelivered-btn");
+       countyundeliveredButtons.forEach(button => {
+           button.addEventListener('click', function() {
+               const CpID = this.getAttribute('data-Cp-id');
+               countyundeliveredPackage(CpID);
+           });
+       });
+
+       function countyundeliveredPackage(CpID) {
+           // Send an AJAX request to your server to update the status
+           const xhr = new XMLHttpRequest();
+           xhr.open('POST', 'Cundelivered_package.php', true);
+           xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+           xhr.onload = function () {
+               if (xhr.status === 200) {
+                   // Refresh the table after undelivered
+                   refreshPackageTable();
+               }
+           };
+           xhr.send(`CpID=${CpID}`);
+       }
+
+       // Function to refresh the package table
+       function refreshPackageTable() {
+           // You can implement the code to fetch and display the updated package data here.
+       }
+   </script>
+    <table>
+
+        <h1>Doorstep Packages</h1>
+
+        <!-- Table to display County Packages -->
+        <table id="DoorstepPackageTable">
+            <tr>
+                <th>Customer Name</th>
+                <th>Phone Number</th>
+                <th>Sending From</th>
+                <th>Sending To</th>
+                <th>Extra Info</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+            <?php
+            include 'connection.php';
+            $mysqli = new mysqli($server, $user, $pass, $database);
+            if ($mysqli->connect_error) {
+                exit('Could not connect');
+            }
+
+            // Query for County Packages
+            $sqlDoorstep = "SELECT DpId, customerName, phoneNumber, sendingFrom, sendingTo, extraInfo, status FROM doorsteppackages";
+            $resultDoorstep = $mysqli->query($sqlDoorstep);
+
+            if (!$resultDoorstep) {
+                echo "Error: " . $mysqli->error;
+            } else {
+                // Display County Packages
+                if ($resultDoorstep->num_rows > 0) {
+                    while ($row = $resultDoorstep->fetch_assoc()) {
+                        echo "<tr>";
+                        echo "<td>" . $row['customerName'] . "</td>";
+                        echo "<td>" . $row['phoneNumber'] . "</td>";
+                        echo "<td>" . $row['sendingFrom'] . "</td>";
+                        echo "<td>" . $row['sendingTo'] . "</td>";
+                        echo "<td>" . $row['extraInfo'] . "</td>";
+                        echo "<td>" . $row['status'] . "</td>";
+                        echo '<td><button class="doorstepapprove-btn" data-Dp-Id="' . $row['DpId'] . '">Approve</button></td>';
+                        echo '<td><button class="doorstepdispatch-btn" data-Dp-Id="' . $row['DpId'] . '">Dispatch</button></td>';
+                        echo '<td><button class="doorstepdelivered-btn" data-Dp-Id="' . $row['DpId'] . '">Delivered</button></td>';
+                        echo '<td><button class="doorstepundelivered-btn" data-Dp-Id="' . $row['DpId'] . '">Undelivered</button></td>';
+                        echo "</tr>";
+                    }
                 }
-            };
-            xhr.send(`CpID=${CpID}`);
-        }
+            }
 
-        // AJAX to handle delivered packages
-        const countydeliveredButtons = document.querySelectorAll(".countydelivered-btn");
-        countydeliveredButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                const ApID = this.getAttribute('data-Cp-id');
-                countydeliveredPackage(CpID);
-            });
-        });
+            $mysqli->close();
+            ?>
+    </table>
 
-        function countydeliveredPackage(CpID) {
-            // Send an AJAX request to your server to update the status
-            const xhr = new XMLHttpRequest();
-            xhr.open('POST', 'Cdelivered_package.php', true);
-            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-            xhr.onload = function () {
-                if (xhr.status === 200) {
-                    // Refresh the table after delivered
-                    refreshPackageTable();
-                }
-            };
-            xhr.send(`CpID=${CpID}`);
-        }
-
-        // AJAX to handle undelivered packages 
-        const countyundeliveredButtons = document.querySelectorAll(".countyundelivered-btn");
-        countyundeliveredButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                const ApID = this.getAttribute('data-Cp-id');
-                countyundeliveredPackage(CpID);
-            });
-        });
-
-        function countyundeliveredPackage(ApID) {
-            // Send an AJAX request to your server to update the status
-            const xhr = new XMLHttpRequest();
-            xhr.open('POST', 'Cundelivered_package.php', true);
-            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-            xhr.onload = function () {
-                if (xhr.status === 200) {
-                    // Refresh the table after undelivered
-                    refreshPackageTable();
-                }
-            };
-            xhr.send(`CpID=${CpID}`);
-        }
-
-        // Function to refresh the package table
-        function refreshPackageTable() {
-            // You can implement the code to fetch and display the updated package data here.
-        }
+   <script>
        
         const doorstepapproveButtons = document.querySelectorAll(".doorstepapprove-btn");
         doorstepapproveButtons.forEach(button => {

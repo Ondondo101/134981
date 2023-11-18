@@ -29,10 +29,10 @@ if (isset($_POST['CpID']) && !empty($_POST['CpID'])) {
     // Execute the statement
     if ($stmt->execute()) {
         // The update was successful
-        echo "Success: Package has been delivered and status updated to 'Delivered'.";
+        echo "Success: Package has been delivered and status updated to 'delivered'.";
     } else {
         // Error occurred during the update
-        echo "Error: Package delivery not updated . " . $stmt->error;
+        echo "Error: Package not updated . " . $stmt->error;
     }
 
     // Close the statement and the database connection
