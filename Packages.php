@@ -10,7 +10,7 @@ if (!isset($_SESSION['name'])) {
 $username = $_SESSION['name'];
 
 // Fetch data from agentPackages table
-$sqlAgent = "SELECT ApId, customerName, phoneNumber, sendingFrom, packageColor, sendingTo, status
+$sqlAgent = "SELECT ApId, customerName, phoneNumber, sendingFrom, FromAgent, packageColor, sendingTo, ToAgent, status
             FROM agentPackages
             WHERE username = ?";
 
@@ -27,7 +27,7 @@ if (!$resultAgent) {
 }
 
 // Fetch data from countypackages table
-$sqlCounty = "SELECT  CpId, customerName, phoneNumber, sendingFrom, packageColor, sendingTo, status
+$sqlCounty = "SELECT  CpId, customerName, phoneNumber, sendingFrom,  FromAgent, packageColor, sendingTo, ToAgent, status
               FROM countypackages
               WHERE username = ?";
 
@@ -44,7 +44,7 @@ if (!$resultCounty) {
 }
 
 // Fetch data from doorsteppackages table
-$sqlDoorstep = "SELECT  DpId, customerName, phoneNumber, sendingTo, extraInfo, status
+$sqlDoorstep = "SELECT  DpId, customerName, phoneNumber, sendingFrom, FromAgent, sendingTo, extraInfo, status
                 FROM doorsteppackages
                 WHERE username = ?";
 
@@ -87,25 +87,36 @@ $allPackages = array_merge($packagesAgent, $packagesCounty, $packagesDoorstep);
     <h2>My Packages</h2>
 
     <?php foreach ($allPackages as $package) : ?>
-        <div class="package-card">
-    <p>
+    <div class="package-card">
         <?php
+        $title = '';
         if (isset($package['ApId'])) {
-            echo 'agentpackages';
+            $title = 'Agent Packages';
         } elseif (isset($package['CpId'])) {
-            echo 'countypackages';
+            $title = 'County Packages';
         } elseif (isset($package['DpId'])) {
-            echo 'doorsteppackages';
+            $title = 'Doorstep Packages';
         } else {
-            echo 'Unknown Table';
+            $title = 'Unknown Table';
         }
         ?>
-    </p>
-    <p>Status: <?php echo $package['status']; ?></p>
-    <p>To: <?php echo $package['sendingTo']; ?></P>
-</div>
+        <h3><?php echo $title; ?></h3>
+        <p>Status: <?php echo $package['status']; ?></p>
+        <p>To: <?php echo $package['sendingTo']; ?>
+            <?php
+            if (isset($package['DpId'])) {
+                // Display extraInfo field for doorstep packages
+                echo ' - ' . $package['extraInfo'];
+            } else {
+                // Display ToAgent field for other packages
+                echo ' - ' . $package['ToAgent'] . ' Agent';
+            }
+            ?>
+        </p>
+        <p>From: <?php echo $package['sendingFrom']; ?> - <?php echo $package['FromAgent']; ?> Agent</p>
+    </div>
+<?php endforeach; ?>
 
-    <?php endforeach; ?>
 </body>
 
 </html>

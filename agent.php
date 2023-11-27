@@ -6,43 +6,59 @@ if (!isset($_SESSION['name'])) {
     header("Location: login.php");
 }
 
+// Function to generate a unique tracking ID
+function generateTrackingID($length = 10) {
+    $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    $trackingID = '';
+    for ($i = 0; $i < $length; $i++) {
+        $trackingID .= $characters[rand(0, strlen($characters) - 1)];
+    }
+    return $trackingID;
+}
+
 // Initialize variables for form fields
-$customerName = $phoneNumber = $sendingFrom = $packageColor = $sendingTo = "";
+$customerName = $phoneNumber = $sendingFrom = $agentStore = $packageColor = $sendingTo = $AgentStore = "";
 
 // Check if the form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Get the values from the form
     $customerName = $_POST["customerName"];
     $phoneNumber = $_POST["phoneNumber"];
-    $sendingFrom = $_POST["agentStore"];
+    $sendingFrom = $_POST["sendingFrom"];
+    $agentStore = $_POST["agentStore"];
     $packageColor = $_POST["packageColor"];
-    $sendingTo = $_POST["AgentStore"];
+    $sendingTo = $_POST["sendingTo"];
+    $AgentStore = $_POST["AgentStore"];
 
-   // Retrieve the username from the session
-   $username = $_SESSION['name'];
+    // Retrieve the username from the session
+    $username = $_SESSION['name'];
 
-   // Database connection
-   $conn = mysqli_connect($server, $user, $pass, $database);
+    // Generate a unique tracking ID
+    $trackingID = generateTrackingID();
 
-   // Check if the connection was successful
-   if ($conn->connect_error) {
-       die("Connection failed: " . $conn->connect_error);
-   }
+    // Database connection
+    $conn = mysqli_connect($server, $user, $pass, $database);
 
-   // Insert the package data into the database with a "Pending Approval" status
-   $sql = "INSERT INTO agentpackages (customerName, phoneNumber, sendingFrom, packageColor, sendingTo, status, username) VALUES ('$customerName', '$phoneNumber', '$sendingFrom', '$packageColor', '$sendingTo', 'Pending Approval', '$username')";
+    // Check if the connection was successful
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
 
-   if ($conn->query($sql) === TRUE) {
-       // Data inserted successfully
-       echo "Package submitted successfully.";
-   } else {
-       // Error handling
-       echo "Error: " . $sql . "<br>" . $conn->error;
-   }
+    // Insert the package data into the database with a "Pending Approval" status
+    $sql = "INSERT INTO agentpackages (customerName, phoneNumber, sendingFrom, FromAgent, packageColor, sendingTo, ToAgent, status, username, tracking_id) VALUES ('$customerName', '$phoneNumber', '$sendingFrom', '$agentStore', '$packageColor', '$sendingTo', ' $AgentStore', 'Pending Approval', '$username', '$trackingID')";
 
-   $conn->close(); // Close the database connection
+    if ($conn->query($sql) === TRUE) {
+        // Data inserted successfully
+        echo "Package submitted successfully. Tracking ID: $trackingID";
+    } else {
+        // Error handling
+        echo "Error: " . $sql . "<br>" . $conn->error;
+    }
+
+    $conn->close(); // Close the database connection
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">

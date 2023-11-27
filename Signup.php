@@ -29,6 +29,19 @@ if (isset($_POST['submit'])) {
             $sql = "INSERT INTO users (name, email, password, role)
                     VALUES ('$username', '$email', '$hashedPassword', '$role')";
             $result = mysqli_query($conn, $sql);
+
+            // Check if the user role is 'agent' and insert branch information
+            if ($result && $role === 'agent') {
+                $branchName = $_POST['branchName']; // Added line to get branch name for agent
+                $location = $_POST['location'];
+                $sqlBranch = "INSERT INTO branch (B_name, Agent_name, location)
+                              VALUES ('$branchName', '$username', '$location')";
+                $resultBranch = mysqli_query($conn, $sqlBranch);
+                if (!$resultBranch) {
+                    echo "<script>alert('Error inserting branch information.')</script>";
+                } 
+            }
+
             if ($result) {
                 echo "<script>alert('Wow! User Registration Completed.')</script>";
                 $username = "";
@@ -46,7 +59,6 @@ if (isset($_POST['submit'])) {
     }
 }
 ?>
-
 
 
 <!DOCTYPE html>
@@ -89,7 +101,7 @@ if (isset($_POST['submit'])) {
             </ul>
         </nav>
     </header>
-	<div class="container">
+	<div class="container" style= "height:800px" >
 		<form action="" method="POST" class="login-email">
             <p class="login-text" style="font-size: 2rem; font-weight: 800;">Register</p>
 			<div class="input-group">
@@ -106,14 +118,24 @@ if (isset($_POST['submit'])) {
             <div class="input-group">
 				<input type="password" placeholder="Confirm Password" name="cpassword" value="<?php echo $_POST['cpassword']; ?>" required>
 			</div>
-			<div class="input-group">
-                <label for="role">Select Role:</label>
-                <select id="role" name="role" required>
-                    <option value="admin">Admin</option>
-                    <option value="agent">Agent</option>
-                    <option value="vendor">Vendor</option>
-                    <option value="courier">Courier</option>
-                </select>
+            <div class="input-group">
+            <label for="role">Select Role:</label>
+            <select id="role" name="role" required onchange="handleRoleChange()">
+                <option value="admin">Admin</option>
+                <option value="agent">Agent</option>
+                <option value="vendor">Vendor</option>
+                <option value="courier">Courier</option>
+            </select>
+        </div>
+
+        <div class="input-group" id="branchInput">
+            <label for="branchName">Branch Name:</label>
+            <input type="text" id="branchName" name="branchName">
+        </div>
+        <div class="input-group" id="locationInput">
+            <label for="location">Location:</label>
+            <input type="text" id="location" name="location">
+        </div>
 			<div class="input-group">
 				<button name="submit" class="btn">Register</button>
 			</div>
@@ -121,6 +143,23 @@ if (isset($_POST['submit'])) {
 			
 		</form>
 	</div>
+    <script>
+    function handleRoleChange() {
+        var roleSelect = document.getElementById("role");
+        var branchInput = document.getElementById("branchInput");
+        var locationInputs = document.getElementById("locationInputs");
+
+        // If the selected role is "vendor", show the branch and location inputs; otherwise, hide them
+        if (roleSelect.value === "agent") {
+            branchInput.style.display = "block";
+            locationInputs.style.display = "block";
+        } else {
+            branchInput.style.display = "none";
+            locationInputs.style.display = "none";
+        }
+    }
+</script>
+
 </body>
 
 </html>

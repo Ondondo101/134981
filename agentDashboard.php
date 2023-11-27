@@ -55,8 +55,10 @@ if (!isset($_SESSION['name'])) {
             <th>Customer Name</th>
             <th>Phone Number</th>
             <th>Sending From</th>
+            <th>FromAgent</th>
             <th>Package Color</th>
             <th>Sending To</th>
+            <th>ToAgent</th>
             <th>Status</th>
             <th>Action</th>
         </tr>
@@ -69,7 +71,7 @@ if (!isset($_SESSION['name'])) {
         }
 
         // Query for Agent Packages
-        $sqlAgent = "SELECT ApID, customerName, phoneNumber, sendingFrom, packageColor, sendingTo, status FROM agentpackages";
+        $sqlAgent = "SELECT ApID, customerName, phoneNumber, sendingFrom,FromAgent, packageColor, sendingTo, ToAgent, status FROM agentpackages";
         $resultAgent = $mysqli->query($sqlAgent);
 
         if (!$resultAgent) {
@@ -82,8 +84,10 @@ if (!isset($_SESSION['name'])) {
                     echo "<td>" . $row['customerName'] . "</td>";
                     echo "<td>" . $row['phoneNumber'] . "</td>";
                     echo "<td>" . $row['sendingFrom'] . "</td>";
+                    echo "<td>" . $row['FromAgent'] . "</td>";
                     echo "<td>" . $row['packageColor'] . "</td>";
                     echo "<td>" . $row['sendingTo'] . "</td>";
+                    echo "<td>" . $row['ToAgent'] . "</td>";
                     echo "<td>" . $row['status'] . "</td>";
                     echo '<td><button class="agentapprove-btn" data-Ap-id="' . $row['ApID'] . '">Approve</button></td>';
                     echo '<td><button class="agentdispatch-btn" data-Ap-id="' . $row['ApID'] . '">Dispatch</button></td>';

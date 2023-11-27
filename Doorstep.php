@@ -6,8 +6,18 @@ if (!isset($_SESSION['name'])) {
     header("Location: login.php");
 }
 
+// Function to generate a unique tracking ID
+function generateTrackingID($length = 10) {
+    $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    $trackingID = '';
+    for ($i = 0; $i < $length; $i++) {
+        $trackingID .= $characters[rand(0, strlen($characters) - 1)];
+    }
+    return $trackingID;
+}
+
 // Initialize variables for form fields
-$customerName = $phoneNumber = $sendingFrom= $sendingTo = $extraInfo= "";
+$customerName = $phoneNumber = $sendingFrom = $sendingTo = $extraInfo = "";
 
 // Check if the form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -19,22 +29,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $extraInfo = $_POST["extraInfo"];
 
     // Check if all fields are filled
-    if (!empty($customerName) && !empty($phoneNumber)&& !empty($sendingFrom) && !empty($sendingTo) && !empty($extraInfo) ) {
+    if (!empty($customerName) && !empty($phoneNumber) && !empty($sendingFrom) && !empty($sendingTo) && !empty($extraInfo)) {
         // Retrieve the username from the session
         $username = $_SESSION['name'];
 
-        // Calculate the total fee
-        $totalFee = ($_POST['delivery_option'] == 'vendor_pays') ? 300 : 0;
+        // Generate a unique tracking ID
+        $trackingID = generateTrackingID();
 
-        // Insert the data into the database, including the username
-        $sql = "INSERT INTO doorsteppackages (customerName, phoneNumber, sendingFrom, sendingTo, extraInfo, status, username) VALUES (?, ?, ?, ?, ?, 'Pending Approval', ?)";
+        // Database connection
+        $conn = mysqli_connect($server, $user, $pass, $database);
+
+        // Check if the connection was successful
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+
+        // Insert the data into the database, including the username and tracking ID
+        $sql = "INSERT INTO doorsteppackages (customerName, phoneNumber, FromAgent, sendingTo, extraInfo, status, username, tracking_id) VALUES (?, ?, ?, ?, ?, 'Pending Approval', ?, ?)";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("ssssss", $customerName, $phoneNumber, $sendingFrom, $sendingTo, $extraInfo, $username);
-
+        $stmt->bind_param("sssssss", $customerName, $phoneNumber, $sendingFrom, $sendingTo, $extraInfo, $username, $trackingID);
 
         if ($stmt->execute()) {
             // Display the total fee
-            echo "Package submitted successfully";
+            echo "Package submitted successfully. Tracking ID: $trackingID";
         } else {
             // If the insertion fails, display an error message
             echo "Error: package not submitted " . $stmt->error;
@@ -42,9 +59,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         // Close the statement
         $stmt->close();
-
-}}
+        $conn->close(); // Close the database connection
+    }
+}
 ?>
+
 
 
 <!DOCTYPE html>
