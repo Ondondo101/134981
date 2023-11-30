@@ -11,7 +11,7 @@ h2 {
 }
 
 .package-card {
-    background-color: #fff;
+    background-color:  linear-gradient(to right, rgba(156, 69, 69, 0), rgba(146, 20, 20, 0.5));
     border: 1px solid #ddd;
     border-radius: 8px;
     padding: 20px;
@@ -30,7 +30,7 @@ h2 {
     margin-bottom: 10px;
 }
 button {
-    background-color: #007bff;
+    background-color: #ff6600;
     color: #fff;
     border: none;
     padding: 10px 20px;

@@ -57,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
-	<link rel="stylesheet" type="text/css" href="nstyle.css">
+	<link rel="stylesheet" type="text/css" href="ccourier.css">
     
 
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
@@ -231,27 +231,28 @@ if (navigator.geolocation) {
 
 </script>
 <script>
-            // Function to manually update location
-            function manualUpdateLocation() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(
-                    (position) => {
-                        const { latitude, longitude } = position.coords;
-                        const courier_id = '?';  // Replace with the actual user ID
+    function manualUpdateLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const { latitude, longitude } = position.coords;
+                    const courier_id = '?';  // Replace with the actual user ID
 
-                        // Send the location data to your server
-                        updateLocationOnServer(courier_id, latitude, longitude, username: '<?php echo $_SESSION['name']; ?>');
-                    },
-                    (error) => {
-                        console.error(error.message);
-                    }
-                );
-            } else {
-                console.error('Geolocation is not supported by this browser.');
-            }
+                    // Send the location data to your server
+                    updateLocationOnServer(courier_id, latitude, longitude, '<?php echo $_SESSION['name']; ?>');
+
+                    // Reload the page after the location update
+                    location.reload();
+                },
+                (error) => {
+                    console.error(error.message);
+                }
+            );
+        } else {
+            console.error('Geolocation is not supported by this browser.');
         }
+    }
 </script>
-
 
 
 
