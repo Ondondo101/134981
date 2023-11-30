@@ -7,7 +7,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
-    <link rel="stylesheet" type="text/css" href="landp.css">
+    <link rel="stylesheet" type="text/css" href="landing.css">
     <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
@@ -22,12 +22,14 @@
 <body>
     <header>
         <nav>
-          <a href="landing.html">
+          <a href="landing.php">
             <div class="logo">
                 <img src="deli.png" alt="Company Logo">
             </div>
         </a>
         
+        
+
 
             <form method="get" action="track.php" class="package-tracking-form">
             <label for="tracking-id"></label>
@@ -88,8 +90,8 @@
                         <!-- Add an icon or image for the service -->
                         <i class="fas fa-store"></i>
                     </div>
-                    <h3>Rent a Shelf</h3>
-                    <p>Run your business efficiently with our affordable storage service at our CBD offices.</p>
+                    <h3>Track you package</h3>
+                    <p>Relax and track your package in real Time at the comfort of your home.</p>
                 </div>
             </div>
 
@@ -106,31 +108,8 @@
             </div>
         </div>
     </div>
-</section>
 
-    <!-- FAQ section -->
-    <div class="faq-container">
-        <div class="faq-question" onclick="toggleFAQ(1)">
-            <span>How does Pick up Mtaani work?</span>
-            <span>&#43;</span>
-        </div>
-        <div class="faq-answer" id="faq-1">
-            <p>Answer: Your answer goes here.</p>
-        </div>
-
-        <!-- Repeat the above structure for each FAQ item -->
-        <!-- ... -->
-
-    </div>
-
-    <script>
-        // Add the JavaScript function to toggle FAQ answers
-        function toggleFAQ(faqNumber) {
-            var faqAnswer = document.getElementById('faq-' + faqNumber);
-            faqAnswer.style.display = (faqAnswer.style.display === 'block') ? 'none' : 'block';
-        }
-    </script>
-
+    <br>
 	<section class="contact">
 		<div class="container contact__container">
 			<aside class="contact__aside">

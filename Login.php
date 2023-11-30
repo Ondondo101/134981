@@ -79,7 +79,7 @@ if (isset($_POST['submit'])) {
 
 <header>
 	<nav>
-		<a href="landing.html">
+		<a href="landing.php">
 		<div class="logo">
 			<img src="deli.png" alt="Company Logo">
 		</div>
@@ -94,12 +94,13 @@ if (isset($_POST['submit'])) {
 
             <ul class="nav-links">
                 
-                <li><a href="landing.html">Home</a></li>
+                <li><a href="landing.php">Home</a></li>
                 
                 <li><a href="Signup.php">Sign Up </a></li>
             </ul>
         </nav>
     </header>
+    <br>
 <body>
 	<div class="container">
 		<form action="" method="POST" class="login-email">
@@ -117,8 +118,6 @@ if (isset($_POST['submit'])) {
 		</form>
 	</div>
 </body>
- 
-<footer>
-        <p>&copy; 2023 Logistics & Courier</p>
-    </footer>
+
+
 </html>

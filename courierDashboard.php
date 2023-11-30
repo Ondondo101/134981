@@ -54,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+    <title>Courier Dashboard</title>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
 	<link rel="stylesheet" type="text/css" href="ccourier.css">
@@ -258,8 +258,7 @@ if (navigator.geolocation) {
 
 
 </body>
- 
 <footer>
-        <p>&copy; 2023 Logistics & Courier</p>
-    </footer>
+    <?php include 'footer.html'; ?>
+</footer>
 </html>

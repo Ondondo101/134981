@@ -20,11 +20,11 @@ ul{
 	list-style: none;
 }
 .footer{
-	background-color: #24262b;
+	background-color: #ff6600;
     padding: 70px 0;
 }
 .footer-col{
-   width: 25%;
+   width: 30%;
    padding: 0 15px;
 }
 .footer-col h4{
@@ -40,7 +40,7 @@ ul{
 	position: absolute;
 	left:0;
 	bottom: -10px;
-	background-color: #e91e63;
+	background-color: #ff6600;
 	height: 2px;
 	box-sizing: border-box;
 	width: 50px;
