@@ -32,9 +32,7 @@ if (isset($_POST['submit'])) {
 
             // Redirect based on user role
             switch ($_SESSION['role']) {
-                case 'admin':
-                    header("Location: admin_dashboard.php");
-                    break;
+
                 case 'agent':
                     header("Location: agentDashboard.php");
                     break;

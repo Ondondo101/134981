@@ -78,11 +78,6 @@ $conn->close();
     </script> 
     <div class="profile-container">
         <form type = "file" method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-            <!-- Add this section to your profile page where you want to display the profile picture -->
-            <div class="profile-picture">
-                <img src="<?php echo $userData['profile_picture']; ?>" alt="Profile Picture">
-                <div class="upload-icon">&#9998;</div>
-            </div>
 
             <div class="user-info">
                 <div class="info-row">

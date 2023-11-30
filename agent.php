@@ -1,5 +1,5 @@
 <?php
-include 'connection.php'; // Include the database connection file
+include 'connection.php';
 session_start();
 
 if (!isset($_SESSION['name'])) {
@@ -9,11 +9,11 @@ if (!isset($_SESSION['name'])) {
 // Function to generate a unique tracking ID
 function generateTrackingID($length = 10) {
     $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    $trackingID = '';
+    $AtrackingID = '';
     for ($i = 0; $i < $length; $i++) {
-        $trackingID .= $characters[rand(0, strlen($characters) - 1)];
+        $AtrackingID .= $characters[rand(0, strlen($characters) - 1)];
     }
-    return $trackingID;
+    return $AtrackingID;
 }
 
 // Initialize variables for form fields
@@ -34,7 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = $_SESSION['name'];
 
     // Generate a unique tracking ID
-    $trackingID = generateTrackingID();
+    $AtrackingID = generateTrackingID();
 
     // Database connection
     $conn = mysqli_connect($server, $user, $pass, $database);
@@ -45,11 +45,37 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Insert the package data into the database with a "Pending Approval" status
-    $sql = "INSERT INTO agentpackages (customerName, phoneNumber, sendingFrom, FromAgent, packageColor, sendingTo, ToAgent, status, username, tracking_id) VALUES ('$customerName', '$phoneNumber', '$sendingFrom', '$agentStore', '$packageColor', '$sendingTo', ' $AgentStore', 'Pending Approval', '$username', '$trackingID')";
-
+    $sql = "INSERT INTO agentpackages (customerName, phoneNumber, sendingFrom, FromAgent, packageColor, sendingTo, ToAgent, status, username, Atracking_id) VALUES ('$customerName', '$phoneNumber', '$sendingFrom', '$agentStore', '$packageColor', '$sendingTo', ' $AgentStore', 'Pending Approval', '$username', '$AtrackingID')";
+// Generate the timestamp
+        $timestamp = date('YmdHis');
     if ($conn->query($sql) === TRUE) {
         // Data inserted successfully
-        echo "Package submitted successfully. Tracking ID: $trackingID";
+        echo "Package submitted successfully. Tracking ID: $AtrackingID";
+
+        // Call M-Pesa API for payment
+        $mpesaCh = curl_init('https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest');
+        curl_setopt($mpesaCh, CURLOPT_HTTPHEADER, [
+            'Authorization: Bearer prdc0mDfj7vMXDkWHzKDLUj6IvZB',
+            'Content-Type: application/json'
+        ]);
+        curl_setopt($mpesaCh, CURLOPT_POST, 1);
+        curl_setopt($mpesaCh, CURLOPT_POSTFIELDS, json_encode([
+            "BusinessShortCode" => 174379,
+            "Password" => "MTc0Mzc5YmZiMjc5ZjlhYTliZGJjZjE1OGU5N2RkNzFhNDY3Y2QyZTBjODkzMDU5YjEwZjc4ZTZiNzJhZGExZWQyYzkxOTIwMjMxMTI4MjM1MjA4",
+            "Timestamp" => "20231128235208",
+            "TransactionType" => "CustomerPayBillOnline",
+            "Amount" => 1,
+            "PartyA" => 254708374149,
+            "PartyB" => 174379,
+            "PhoneNumber"=> 254790342747,
+            "CallBackURL" => "https://mydomain.com/path",
+            "AccountReference" => "Deli",
+            "TransactionDesc" => "Payment of package"
+        ]));
+        curl_setopt($mpesaCh, CURLOPT_RETURNTRANSFER, 1);
+        $mpesaResponse = curl_exec($mpesaCh);
+        curl_close($mpesaCh);
+        echo $mpesaResponse;
     } else {
         // Error handling
         echo "Error: " . $sql . "<br>" . $conn->error;
@@ -58,6 +84,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $conn->close(); // Close the database connection
 }
 ?>
+
 
 
 <!DOCTYPE html>
@@ -80,7 +107,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </script>   
     <div class="container">
         <div class="notification">
-            Send from Agent to Agent at Ksh 250
+            Send from Agent to Agent at Ksh 200
         </div>
         <h2>Agent Service</h2>
         <form id="agentForm" method="post">
@@ -245,7 +272,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                         if (firstClick) {
                             // Calculate the delivery fee and display it
-                            const deliveryFee = 250;
+                            const deliveryFee = 200;
                             const feeContainer = document.querySelector(".total-fee");
                             feeContainer.textContent = `Total Fee: Ksh ${deliveryFee}`;
 

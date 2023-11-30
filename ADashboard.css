@@ -166,6 +166,12 @@ button {
     font-size: 14px;
     margin: 4px 2px;
 }
+.assign-courier-btn{
+    background-color: #ae00ff;
+}
+.agentassign-btn{
+    background-color: #ae00ff;
+}
 
 .agentapprove-btn {
     background-color: #4CAF50;
@@ -213,6 +219,7 @@ button {
 .doorstepundelivered-btn {
     background-color: #ff9800;
 }
+
 /* Optional: Add hover effect */
 button:hover {
     opacity: 0.8;

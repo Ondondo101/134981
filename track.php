@@ -2,20 +2,70 @@
 include 'connection.php'; // Include your database connection file
 
 if (isset($_GET['tracking-id'])) {
-    $trackingId = $_GET['tracking-id'];
+    $AtrackingId = $_GET['tracking-id'];
     
-    // Query the database to retrieve information based on the tracking ID
-    $sql = "SELECT username, latitude, longitude, timestamp FROM courier_locations WHERE tracking_id = ?";
+    // Query the database to retrieve the latest information based on the tracking ID
+    $sql = "SELECT username, latitude, longitude, timestamp FROM courier_locations WHERE Atracking_id = ? ORDER BY timestamp DESC LIMIT 1";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("s", $trackingId);
+    $stmt->bind_param("s", $AtrackingId);
     $stmt->execute();
     $stmt->bind_result($username, $latitude, $longitude, $timestamp);
 
     // Fetch the result
     if ($stmt->fetch()) {
-        $status = "Package found";
+        $Astatus = "Package found";
     } else {
-        $status = "Package not found";
+        $Astatus = "Package not found";
+        // You can customize this message or handle it differently based on your requirements
+    }
+
+    $stmt->close();
+}
+?>
+
+<?php
+include 'connection.php'; // Include your database connection file
+
+if (isset($_GET['tracking-id'])) {
+    $CtrackingId = $_GET['tracking-id'];
+    
+    // Query the database to retrieve the latest information based on the tracking ID
+    $sql = "SELECT username, latitude, longitude, timestamp FROM courier_locations WHERE Ctracking_id = ? ORDER BY timestamp DESC LIMIT 1";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $CtrackingId);
+    $stmt->execute();
+    $stmt->bind_result($username, $latitude, $longitude, $timestamp);
+
+    // Fetch the result
+    if ($stmt->fetch()) {
+        $Cstatus = "Package found";
+    } else {
+        $Cstatus = "Package not found";
+        // You can customize this message or handle it differently based on your requirements
+    }
+
+    $stmt->close();
+}
+?>
+
+<?php
+include 'connection.php'; // Include your database connection file
+
+if (isset($_GET['tracking-id'])) {
+    $DtrackingId = $_GET['tracking-id'];
+    
+    // Query the database to retrieve the latest information based on the tracking ID
+    $sql = "SELECT username, latitude, longitude, timestamp FROM courier_locations WHERE Dtracking_id = ? ORDER BY timestamp DESC LIMIT 1";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $DtrackingId);
+    $stmt->execute();
+    $stmt->bind_result($username, $latitude, $longitude, $timestamp);
+
+    // Fetch the result
+    if ($stmt->fetch()) {
+        $Dstatus = "Package found";
+    } else {
+        $Dstatus = "Package not found";
         // You can customize this message or handle it differently based on your requirements
     }
 
@@ -54,22 +104,48 @@ if (isset($_GET['tracking-id'])) {
         }
     </style>
 
+<!-- Add this PHP section before the JavaScript section -->
+<?php if (isset($Astatus) && $Astatus === 'Package found') : ?>
     <script>
-        // Initialize the map with the provided latitude and longitude
-        function initMap() {
-            var map = new google.maps.Map(document.getElementById('map'), {
-                center: {lat: <?php echo $latitude; ?>, lng: <?php echo $longitude; ?>},
-                zoom: 15
-            });
-
-            // Add a marker for the package location
-            var marker = new google.maps.Marker({
-                position: {lat: <?php echo $latitude; ?>, lng: <?php echo $longitude; ?>},
-                map: map,
-                title: 'Package Location'
-            });
-        }
+        var latitude = <?php echo $latitude; ?>;
+        var longitude = <?php echo $longitude; ?>;
+        var trackingId = <?php echo $AtrackingId; ?>;
     </script>
+<?php endif; ?>
+
+<?php if (isset($Cstatus) && $Cstatus === 'Package found') : ?>
+    <script>
+        var latitude = <?php echo $latitude; ?>;
+        var longitude = <?php echo $longitude; ?>;
+        var trackingId = <?php echo $CtrackingId; ?>;
+    </script>
+<?php endif; ?>
+
+<?php if (isset($Dstatus) && $Dstatus === 'Package found') : ?>
+    <script>
+        var latitude = <?php echo $latitude; ?>;
+        var longitude = <?php echo $longitude; ?>;
+        var trackingId = <?php echo $DtrackingId; ?>;
+    </script>
+<?php endif; ?>
+
+<script>
+    // Initialize the map with the provided latitude and longitude
+    function initMap() {
+        var map = new google.maps.Map(document.getElementById('map'), {
+            center: {lat: latitude, lng: longitude},
+            zoom: 15
+        });
+
+        // Add a marker for the package location
+        var marker = new google.maps.Marker({
+            position: {lat: latitude, lng: longitude},
+            map: map,
+            title: 'Package Location'
+        });
+    }
+</script>
+
 </head>
 
 <body>
@@ -90,19 +166,15 @@ if (isset($_GET['tracking-id'])) {
         <h2>Package Tracking</h2>
         
         <!-- Display the tracking result here -->
-        <?php if (isset($status)) : ?>
+        
             <div class="tracking-result">
-                <p>Tracking ID: <?php echo $trackingId; ?></p>
-                <p>Status: <?php echo $status; ?></p>
-                <?php if ($status === "Package found") : ?>
                     <p>Courier: <?php echo $username; ?></p>
                     <p>Latitude: <?php echo $latitude; ?></p>
                     <p>Longitude: <?php echo $longitude; ?></p>
                     <p>Timestamp: <?php echo $timestamp; ?></p>
-                <?php endif; ?>
+               
             </div>
-        <?php endif; ?>
-    </section>
+       
 
     <div id="map-container">
         <div id="map"></div>

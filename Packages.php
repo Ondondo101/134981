@@ -10,7 +10,7 @@ if (!isset($_SESSION['name'])) {
 $username = $_SESSION['name'];
 
 // Fetch data from agentPackages table
-$sqlAgent = "SELECT ApId, customerName, phoneNumber, sendingFrom, FromAgent, packageColor, sendingTo, ToAgent, status
+$sqlAgent = "SELECT ApId, customerName, phoneNumber, sendingFrom, FromAgent, packageColor, sendingTo, ToAgent, courier, Atracking_id, status
             FROM agentPackages
             WHERE username = ?";
 
@@ -27,7 +27,7 @@ if (!$resultAgent) {
 }
 
 // Fetch data from countypackages table
-$sqlCounty = "SELECT  CpId, customerName, phoneNumber, sendingFrom,  FromAgent, packageColor, sendingTo, ToAgent, status
+$sqlCounty = "SELECT  CpId, customerName, phoneNumber, sendingFrom,  FromAgent, packageColor, sendingTo, ToAgent, courier, Ctracking_id, status
               FROM countypackages
               WHERE username = ?";
 
@@ -44,7 +44,7 @@ if (!$resultCounty) {
 }
 
 // Fetch data from doorsteppackages table
-$sqlDoorstep = "SELECT  DpId, customerName, phoneNumber, sendingFrom, FromAgent, sendingTo, extraInfo, status
+$sqlDoorstep = "SELECT  DpId, customerName, phoneNumber, sendingFrom, FromAgent, sendingTo, extraInfo, courier, Dtracking_id, status
                 FROM doorsteppackages
                 WHERE username = ?";
 
@@ -75,47 +75,62 @@ $allPackages = array_merge($packagesAgent, $packagesCounty, $packagesDoorstep);
 </head>
 
 <body>
-<button id="backButton" class="btn btn-default">
-                <i class="fas fa-arrow-left"></i> Back
-                </button>
+    <button id="backButton" class="btn btn-default">
+        <i class="fas fa-arrow-left"></i> Back
+    </button>
 
-                <script>
-                document.getElementById('backButton').addEventListener('click', function() {
-                    window.history.back();
-                });
-                </script>
+    <script>
+        document.getElementById('backButton').addEventListener('click', function() {
+            window.history.back();
+        });
+    </script>
     <h2>My Packages</h2>
 
     <?php foreach ($allPackages as $package) : ?>
-    <div class="package-card">
-        <?php
-        $title = '';
-        if (isset($package['ApId'])) {
-            $title = 'Agent Packages';
-        } elseif (isset($package['CpId'])) {
-            $title = 'County Packages';
-        } elseif (isset($package['DpId'])) {
-            $title = 'Doorstep Packages';
-        } else {
-            $title = 'Unknown Table';
-        }
-        ?>
-        <h3><?php echo $title; ?></h3>
-        <p>Status: <?php echo $package['status']; ?></p>
-        <p>To: <?php echo $package['sendingTo']; ?>
+        <div class="package-card">
             <?php
-            if (isset($package['DpId'])) {
-                // Display extraInfo field for doorstep packages
-                echo ' - ' . $package['extraInfo'];
+            $title = '';
+            if (isset($package['ApId'])) {
+                $title = 'Agent Packages';
+            } elseif (isset($package['CpId'])) {
+                $title = 'County Packages';
+            } elseif (isset($package['DpId'])) {
+                $title = 'Doorstep Packages';
             } else {
-                // Display ToAgent field for other packages
-                echo ' - ' . $package['ToAgent'] . ' Agent';
+                $title = 'Unknown Table';
             }
             ?>
-        </p>
-        <p>From: <?php echo $package['sendingFrom']; ?> - <?php echo $package['FromAgent']; ?> Agent</p>
-    </div>
-<?php endforeach; ?>
+            <h3><?php echo $title; ?></h3>
+
+            <p>Status: <?php echo $package['status']; ?></p>
+            <p>To: <?php echo $package['sendingTo']; ?>
+                <?php
+                if (isset($package['DpId'])) {
+                    // Display extraInfo field for doorstep packages
+                    echo ' - ' . $package['extraInfo'];
+                } else {
+                    // Display ToAgent field for other packages
+                    echo ' - ' . $package['ToAgent'] . ' Agent';
+                }
+                ?>
+            </p>
+            <p>From: <?php echo $package['sendingFrom']; ?> - <?php echo $package['FromAgent']; ?> Agent</p>
+            <p>Courier: <?php echo $package['courier']; ?></p>
+
+            <?php
+            // Adjust the output based on the tracking ID column of each associated table
+            $trackingId = '';
+            if (isset($package['ApId'])) {
+                $trackingId = $package['Atracking_id'];
+            } elseif (isset($package['CpId'])) {
+                $trackingId = $package['Ctracking_id'];
+            } elseif (isset($package['DpId'])) {
+                $trackingId = $package['Dtracking_id'];
+            }
+            ?>
+            <p>Tracking ID: <?php echo $trackingId; ?></p>
+        </div>
+    <?php endforeach; ?>
 
 </body>
 

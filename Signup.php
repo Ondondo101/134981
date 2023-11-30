@@ -121,7 +121,7 @@ if (isset($_POST['submit'])) {
             <div class="input-group">
             <label for="role">Select Role:</label>
             <select id="role" name="role" required onchange="handleRoleChange()">
-                <option value="admin">Admin</option>
+
                 <option value="agent">Agent</option>
                 <option value="vendor">Vendor</option>
                 <option value="courier">Courier</option>

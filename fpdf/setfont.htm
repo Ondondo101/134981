@@ -1,0 +1,85 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>SetFont</title>
+<link type="text/css" rel="stylesheet" href="fpdf.css">
+</head>
+<body>
+<h1>SetFont</h1>
+<code>SetFont(<b>string</b> family [, <b>string</b> style [, <b>float</b> size]])</code>
+<h2>Omschrijving</h2>
+Stelt het lettertype in wat gebruikt wordt om strings weer te geven. Het is noodzakelijk deze methode ten minste één keer aan te roepen, anders zou het resulterende document ongeldig zijn.
+<BR>
+Het lettertype kan een standaard lettertype zijn (een bij het pakket ingesloten) of een lettertype toegevoegd via de AddFont() methode. Standaard lettertypes gebruiken Windows codering cp1252 (West Europa).
+<BR>
+Deze methode kan worden aangeroepen voordat de eerste pagina is gecreëerd en het lettertype wordt vastgehouden van pagina tot pagina.
+<BR>
+Als je de huidige lettergrootte wilt aanpassen, is het eenvoudiger om SetFontSize() aan te roepen.<BR>
+<BR>
+<B>Opmerking:</B> De metrische lettertype bestanden moeten toegankelijk zijn. Ze worden opvolgend opgezocht op:
+<UL>
+<LI>De directory gedefinieerd in de <TT>FPDF_FONTPATH</TT> constante (als deze constante is gedefinieerd)
+<LI>De font directory geplaatst in de map waarin fpdf.php staat (als deze bestaat)
+<LI>De directories toegankelijk door <TT>include()</TT>
+</UL>
+Voorbeeld voor het definiëren van <TT>FPDF_FONTPATH</TT> (let op de verplichte achterliggende slash):
+<div class="doc-source">
+<pre><code>define('FPDF_FONTPATH','/home/www/font/');
+require('fpdf.php');</code></pre>
+</div>
+Als het bestand corresponderend met het aangevraagde lettertype niet gevonden kan worden, wordt de foutmelding "Could not include
+font metric file" (= "Kan het lettertype bestand niet toevoegen") gegenereerd.
+<h2>Parameters</h2>
+<dl class="param">
+<dt><code>family</code></dt>
+<dd>
+Lettertype Familie. Het kan een naam zijn gedefinieerd door AddFont() of een van de standaard families (hoofdletter ongevoelig):
+<UL>
+<LI><TT>Courier</TT> (vaste breedte)
+<LI><TT>Helvetica</TT> or <TT>Arial</TT> (synoniem; sans serif)
+<LI><TT>Times</TT> (serif)
+<LI><TT>Symbol</TT> (symbolen)
+<LI><TT>ZapfDingbats</TT> (symbolen)
+</UL>
+Het is ook mogelijk om een lege string in te geven. In dat geval blijft de huidige familie behouden.
+</dd>
+<dt><code>style</code></dt>
+<dd>
+Stijl van het lettertype. Mogelijk waardes zijn (hoofdletter ongevoelig):
+<UL>
+<LI>lege string: normaal
+<LI><TT>B</TT>: Vet
+<LI><TT>I</TT>: Cursief
+<LI><TT>U</TT>: Onderstrepen
+</UL>
+Of een combinatie. De standaard waarde is normaal. Vette en Cursie stijlen gelden niet voor <TT>Symbol</TT> en <TT>ZapfDingbats</TT>.
+</dd>
+<dt><code>size</code></dt>
+<dd>
+Lettergrootte in punten.
+<BR>
+De standaard waarde is de huidige grootte. Als er geen grootte is gedefinieerd na het begin van het document, wordt de waarde 12 genomen.
+</dd>
+</dl>
+<h2>Voorbeeld</h2>
+<div class="doc-source">
+<pre><code>//Times normaal 12
+$pdf-&gt;SetFont('Times');
+//Arial vet 14
+$pdf-&gt;SetFont('Arial','B',14);
+//Verwijdert vet
+$pdf-&gt;SetFont('');
+//Times vet, cursief en onderstreept 14
+$pdf-&gt;SetFont('Times','BIU');</code></pre>
+</div>
+<h2>Bekijk ook</h2>
+<a href="addfont.htm">AddFont()</a>,
+<a href="setfontsize.htm">SetFontSize()</a>,
+<a href="cell.htm">Cell()</a>,
+<a href="multicell.htm">MultiCell()</a>,
+<a href="write.htm">Write()</a>.
+<hr style="margin-top:1.5em">
+<div style="text-align:center"><a href="index.htm">Index</a></div>
+</body>
+</html>

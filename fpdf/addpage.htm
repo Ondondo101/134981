@@ -1,0 +1,51 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>AddPage</title>
+<link type="text/css" rel="stylesheet" href="fpdf.css">
+</head>
+<body>
+<h1>AddPage</h1>
+<code>AddPage([<b>string</b> orientation ,[ <b>mixed</b> format]])</code>
+<h2>Omschrijving</h2>
+Voegt een nieuwe pagina toe aan het document. Als de pagina al aanwezig is, wordt eerst de Footer() methode aangeroepen om een voettekst te genereren. Daarna wordt de pagina toegevoegd, de huidige positie wordt ingesteld op de linker bovenhoek volgens de linker en boven marges, en Header() wordt aangeroepen om de koptekst weer te geven.
+<BR>
+Het lettertype wat was ingesteld voor het aanroepen wordt automatisch hersteld. Het is niet nodig om Setfont() weer aan te roepen als U wilt verder gaan met hetzelfde lettertype. Hetzelfde geldt voor kleuren en lijn breedtes.
+<BR>
+De oorsprong van het coördinaten systeem is bij de linker boven hoek en de ordinaat (= Y coördinaat) neemt toe als U omlaag gaat.
+<h2>Parameters</h2>
+<dl class="param">
+<dt><code>orientation</code></dt>
+<dd>
+Pagina oriëntatie. Mogelijke waardes zijn (hoofdletter ongevoelig):
+<ul>
+<li><code>P</code> of <code>Portrait</code></li>
+<li><code>L</code> of <code>Landscape</code></li>
+</ul>
+De standaard waarde is degene ingesteld bij de constructor.
+</dd>
+<dt><code>format</code></dt>
+<dd>
+Pagina formaat. Mogelijke waardes zijn (hoofdletter ongevoelig):
+<ul>
+<li><code>A3</code></li>
+<li><code>A4</code></li>
+<li><code>A5</code></li>
+<li><code>Letter</code></li>
+<li><code>Legal</code></li>
+</ul>
+of een array met de breedte en hoogte (uitgedrukt in de door de gebruiker ingestelde eenheid).<br>
+<br>
+De standaardwaarde is de waarde megegeven aan de constructor.
+</dd>
+</dl>
+<h2>Bekijk ook</h2>
+<a href="fpdf.htm">FPDF()</a>,
+<a href="header.htm">Header()</a>,
+<a href="footer.htm">Footer()</a>,
+<a href="setmargins.htm">SetMargins()</a>.
+<hr style="margin-top:1.5em">
+<div style="text-align:center"><a href="index.htm">Index</a></div>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>AddFont</title>
+<link type="text/css" rel="stylesheet" href="fpdf.css">
+</head>
+<body>
+<h1>AddFont</h1>
+<code>AddFont(<b>string</b> family [, <b>string</b> style [, <b>string</b> file]])</code>
+<h2>Omschrijving</h2>
+Importeert een TrueType of Type1 lettertype en maakt het beschikbaar. Het is noodzakelijk eerst een definitie van het
+lettertype te genereren met het makefont.php programma.
+<BR>
+Het definitie bestand (en het lettertype bestand zelf wanneer deze wordt ingevoegd) moet aanwezig zijn in de font directory.
+Als het niet gevonden kan worden, zal de fout "Could not include font definition file"
+(= "Kan het lettertype definitie bestand niet toevoegen") worden gegenereerd.
+<h2>Parameters</h2>
+<dl class="param">
+<dt><code>family</code></dt>
+<dd>
+Lettertype Familie. De naam kan willekeurig gekozen worden. Als het een standaard familie naam is, zal het het huidige lettertype overslaan.
+</dd>
+<dt><code>style</code></dt>
+<dd>
+Stijl van het lettertype. Mogelijk waardes zijn (hoofdletter ongevoelig):
+<UL>
+<LI>lege string: normaal
+<LI><TT>B</TT>: Vet
+<LI><TT>I</TT>: Cursief
+<LI><TT>BI</TT> of <TT>IB</TT>: Vet Cursief
+</UL>
+De standaard waarde is normaal.
+</dd>
+<dt><code>file</code></dt>
+<dd>
+Het lettertype definitie bestand.
+<BR>
+Standaard, de naam is opgebouwd uit de familie en stijl, in kleine letters zonder spaties.
+</dd>
+</dl>
+<h2>Voorbeeld</h2>
+<div class="doc-source">
+<pre><code>$pdf-&gt;AddFont('Comic','I');</code></pre>
+</div>
+is gelijk aan:
+<div class="doc-source">
+<pre><code>$pdf-&gt;AddFont('Comic','I','comici.php');</code></pre>
+</div>
+<h2>Bekijk ook</h2>
+<a href="setfont.htm">SetFont()</a>.
+<hr style="margin-top:1.5em">
+<div style="text-align:center"><a href="index.htm">Index</a></div>
+</body>
+</html>

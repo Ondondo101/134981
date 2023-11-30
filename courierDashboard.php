@@ -5,6 +5,12 @@ use Twilio\Rest\Client;
 
 session_start();
 
+
+if (!isset($_SESSION['name'])) {
+    header("Location: login.php");
+}
+
+
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
@@ -14,17 +20,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $courier_id = $data['courier_id'];
     $latitude = $data['latitude'];
     $longitude = $data['longitude'];
-    $username = $_SESSION['name']; // Use the username from the session
-    $tracking_id = $_SESSION['tracking_id']; // Use the tracking_id from the session
+
+    // Get the username from the session
+    $username = $_SESSION['name'];
 
     // Prepare an SQL INSERT statement
-    $sql = "INSERT INTO courier_locations (courier_id, username, latitude, longitude, tracking_id) VALUES (?, ?, ?, ?, ?)";
+    $sql = "INSERT INTO courier_locations (courier_id, username, latitude, longitude) VALUES (?, ?, ?, ?)";
 
     // Create a prepared statement
     $stmt = $conn->prepare($sql);
 
     // Bind parameters and execute the statement
-    $stmt->bind_param("isdds", $courier_id, $username, $latitude, $longitude, $tracking_id);
+    $stmt->bind_param("isdd", $courier_id, $username, $latitude, $longitude);
 
     // Execute the statement
     if ($stmt->execute()) {
@@ -45,18 +52,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
-    <link rel="stylesheet" type="text/css" href="nstyle.css">
+	<link rel="stylesheet" type="text/css" href="nstyle.css">
     
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBe-TvHoVyVkUq-qq0TKHee1FWIbeyJEyA&callback=initMap" async defer></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBe-TvHoVyVkUq-qq0TKHee1FWIbeyJEyA&callback=initMap" async defer></script>
 
     <style>
         #map-container {
@@ -74,68 +81,70 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             height: 100%;
         }
     </style>
-    <title>Login</title>
+	<title>Login</title>
 </head>
 
 <header>
-    <nav>
-        <a href="landing.html">
-        <div class="logo">
-            <img src="deli.png" alt="Company Logo">
-        </div>
-        </a>
+	<nav>
+		<a href="landing.html">
+		<div class="logo">
+			<img src="deli.png" alt="Company Logo">
+		</div>
+		</a>
 
-        <ul class="nav-links">
-            <li><a href="profile.php"> Account</a></li>
-            <li><a href="logout.php">Logout</a></li>
-        </ul>
-    </nav>
-</header>
 
+		<ul class="nav-links">
+                <li><a href="profile.php"> Account</a></li>
+                <li><a href="logout.php">Logout</a></li>
+                
+                
+            </ul>
+           
+        </nav>
+    </header>
 <body>
-    <div id="map-container">   
-        <div id="map"></div>
-    </div>
+<div id = "map-container">   
+    <div id="map" ></div>
+
+</div>
        
-    <button onclick="manualUpdateLocation()">Manual Location Update </button>
+<button onclick="manualUpdateLocation()">Manual Location Update </button>
 
-    <script>
-        if ('geolocation' in navigator) {
-            navigator.geolocation.getCurrentPosition(
-                function (position) {
-                    const latitude = position.coords.latitude;
-                    const longitude = position.coords.longitude;
+<script>
+    if ('geolocation' in navigator) {
+    navigator.geolocation.getCurrentPosition(
+        function (position) {
+            const latitude = position.coords.latitude;
+            const longitude = position.coords.longitude;
 
-                    // Use latitude and longitude to track packages or perform other actions
-                    console.log('Latitude:', latitude, 'Longitude:', longitude);
-                },
-                function (error) {
-                    console.error('Error getting location:', error.message);
-                }
-            );
-        } else {
-            console.log('Geolocation is not supported');
+            // Use latitude and longitude to track packages or perform other actions
+            console.log('Latitude:', latitude, 'Longitude:', longitude);
+        },
+        function (error) {
+            console.error('Error getting location:', error.message);
         }
+    );
+} else {
+    console.log('Geolocation is not supported');
+}
+if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+        (position) => {
+            const { latitude, longitude } = position.coords;
+            const courier_id = '?';  // Replace with the actual user ID
 
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    const { latitude, longitude } = position.coords;
-                    const courier_id = '?';  // Replace with the actual user ID
-
-                    // Send the location data to your server
-                    updateLocationOnServer(courier_id, latitude, longitude);
-                },
-                (error) => {
-                    console.error(error.message);
-                }
-            );
-        } else {
-            console.error('Geolocation is not supported by this browser.');
+            // Send the location data to your server
+            updateLocationOnServer(courier_id, latitude, longitude);
+        },
+        (error) => {
+            console.error(error.message);
         }
-    </script>
-
-    <script>
+    );
+} else {
+    console.error('Geolocation is not supported by this browser.');
+}
+</script>
+<script>
         let map;
 
         function initMap() {
@@ -167,18 +176,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     console.error('Error getting location:', error.message);
                 }
             );
-
             function addMarker(location, title) {
-                new google.maps.Marker({
-                    position: location,
-                    map: map,
-                    title: title
-                });
-            }
-        }
-    </script>
+            new google.maps.Marker({
+            position: location,
+            map: map,
+            title: title
+        });
+    }
+}
 
+        
+    </script>
     <script>
+            // Get user's location
+        navigator.geolocation.watchPosition(updateLocation, errorGettingLocation, { enableHighAccuracy: true, maximumAge: 0 });
+
+        // Function to update location on the server
         function updateLocation(position) {
             const courier_id = getCourierId(); // Implement a function to get the user ID
             const { latitude, longitude } = position.coords;
@@ -196,33 +209,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             .catch(error => console.error('Error updating location:', error));
         }
 
-        function errorGettingLocation(error) {
-            console.error('Error getting location:', error.message);
-        }
-
-        // Get user's location
-        navigator.geolocation.watchPosition(updateLocation, errorGettingLocation, { enableHighAccuracy: true, maximumAge: 0 });
     </script>
 
-    <script>
-        function updateLocationOnServer(courier_id, latitude, longitude, tracking_id) {
-            const xhr = new XMLHttpRequest();
-            xhr.open('POST', 'courierDashboard.php', true);
-            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-            xhr.onload = function () {
-                if (xhr.status === 200) {
-                    console.log('Location update successful:', xhr.responseText);
-                } else {
-                    console.error('Error updating location:', xhr.responseText);
-                }
-            };
-            xhr.send(JSON.stringify({ courier_id, latitude, longitude, username: '<?php echo $_SESSION['name']; ?>', tracking_id }));
-        }
-    </script>
 
-    <script>
-        // Function to manually update location
-        function manualUpdateLocation() {
+<script>
+    
+
+    function updateLocationOnServer(courier_id, latitude, longitude) {
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', 'courierDashboard.php', true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.onload = function () {
+            if (xhr.status === 200) {
+                console.log('Location update successful:', xhr.responseText);
+            } else {
+                console.error('Error updating location:', xhr.responseText);
+            }
+        };
+        xhr.send(JSON.stringify({ courier_id, latitude, longitude, username: '<?php echo $_SESSION['name']; ?>' }));
+    }
+
+</script>
+<script>
+            // Function to manually update location
+            function manualUpdateLocation() {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(
                     (position) => {
@@ -230,7 +240,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         const courier_id = '?';  // Replace with the actual user ID
 
                         // Send the location data to your server
-                        updateLocationOnServer(courier_id, latitude, longitude, tracking_id: '<?php echo $_SESSION['tracking_id']; ?>');
+                        updateLocationOnServer(courier_id, latitude, longitude, username: '<?php echo $_SESSION['name']; ?>');
                     },
                     (error) => {
                         console.error(error.message);
@@ -240,10 +250,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 console.error('Geolocation is not supported by this browser.');
             }
         }
-    </script>
+</script>
+
+
+
+
+
 </body>
  
 <footer>
-    <p>&copy; 2023 Logistics & Courier</p>
-</footer>
+        <p>&copy; 2023 Logistics & Courier</p>
+    </footer>
 </html>

@@ -2,10 +2,6 @@
 session_start();
 include 'connection.php';
 
-if (!isset($_SESSION['name'])) {
-    header('Location: login.php');
-    exit();
-}
 
 
 ?>
@@ -86,11 +82,10 @@ if (!isset($_SESSION['name'])) {
                 echo "<td>" . $row['ToAgent'] . "</td>";
                 echo "<td>" . $row['status'] . "</td>";
                 echo '<td><button class="agentapprove-btn" data-Ap-id="' . $row['ApID'] . '">Approve</button></td>';
+                
+                echo '<td><button class="agentassign-btn" data-Ap-id="' . $row['ApID'] . '">Assign Courier</button></td>';
+
                 echo '<td><button class="agentdispatch-btn" data-Ap-id="' . $row['ApID'] .'">Dispatch</button></td>';
-                echo '<td class="courier-selection" style="display: none;">
-                    <select class="courier-dropdown"></select>
-                    <button class="dispatch-again-btn" data-Ap-id="'. $row['ApID'] .'">Dispatch Again</button>
-                </td>';
                 echo '<td><button class="agentdelivered-btn" data-Ap-id="' . $row['ApID'] . '">Delivered</button></td>';
                 echo '<td><button class="agentundelivered-btn" data-Ap-id="' . $row['ApID'] . '">Undelivered</button></td>';
                 echo "</tr>";
@@ -103,44 +98,51 @@ if (!isset($_SESSION['name'])) {
     </table>
     
 <script>
-    // Inside your JavaScript script
-    // AJAX to handle package dispatch
-    const agentdispatchButtons = document.querySelectorAll(".agentdispatch-btn");
-    agentdispatchButtons.forEach(button => {
-        button.addEventListener('click', function () {
-            const ApID = this.getAttribute('data-Ap-id');
-            const courierSelection = document.querySelector(`.courier-selection[data-Ap-id="${ApID}"]`);
-            const courierDropdown = courierSelection.querySelector('.courier-dropdown');
+    // Add this JavaScript code to your existing script
+const assignCourierButtons = document.querySelectorAll(".agentassign-btn");
 
-            // Fetch and populate couriers from the server
-            fetchCouriers().then(couriers => {
-                // Populate the dropdown with courier options
-                courierDropdown.innerHTML = '';
-                couriers.forEach(courier => {
-                    const option = document.createElement('option');
-                    option.value = courier.name; // Assuming username is the identifier
-                    option.textContent = courier.name; // Adjust this based on your data
-                    courierDropdown.appendChild(option);
-                });
-
-                // Show the courier selection
-                courierSelection.style.display = 'table-cell';
-            });
-        });
+assignCourierButtons.forEach(button => {
+    button.addEventListener('click', function() {
+        const ApID = this.getAttribute('data-Ap-id');
+        assignCourierToPackage(ApID);
     });
+});
 
-    // Inside the fetchCouriers function
-function fetchCouriers() {
-    return fetch('get_couriers.php')
-        .then(response => response.json())
-        .then(data => {
-            console.log('Couriers:', data); // Log the response
-            return data;
-        })
-        .catch(error => console.error('Error fetching couriers:', error));
+function assignCourierToPackage(ApID) {
+    // Send an AJAX request to fetch the list of available couriers
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', 'get_couriers.php', true);
+    xhr.onload = function () {
+        if (xhr.status === 200) {
+            const couriers = JSON.parse(xhr.responseText);
+
+            // Display a prompt to the user to select a courier
+            const selectedCourier = prompt('Select a courier:\n' + couriers.join('\n'));
+
+            if (selectedCourier !== null) {
+                // Update the courier column in the agentpackages table
+                updateCourierInPackage(ApID, selectedCourier);
+            }
+        }
+    };
+    xhr.send();
 }
 
-</script>
+function updateCourierInPackage(ApID, courierName) {
+    // Send an AJAX request to update the courier column in the agentpackages table
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', 'assign_courier.php', true);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.onload = function () {
+        if (xhr.status === 200) {
+            // Refresh the table after assigning the courier
+            refreshPackageTable();
+        }
+    };
+    xhr.send(`ApID=${ApID}&courierName=${courierName}`);
+}
+
+    </script>
 <script>
     // AJAX to handle package dispatch, approval, delivered, and undelivered
     const agentButtons = document.querySelectorAll(".agentapprove-btn, .agentdispatch-btn, .agentdelivered-btn, .agentundelivered-btn");

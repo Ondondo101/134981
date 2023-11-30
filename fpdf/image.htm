@@ -1,0 +1,92 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Image</title>
+<link type="text/css" rel="stylesheet" href="fpdf.css">
+</head>
+<body>
+<h1>Image</h1>
+<code>Image(<b>string</b> file [, <b>float</b> x [, <b>float</b> y [, <b>float</b> w [, <b>float</b> h [, <b>string</b> type [, <b>mixed</b> link]]]]]])</code>
+<h2>Omschrijving</h2>
+Geeft een afbeelding weer. De dimensies kunnen worden gespecificeerd op verschillende manieren:
+<UL>
+<LI>Expliciet breedte en hoogte invoeren (weergegeven in de eenheid van de gebruiker)
+<LI>Een expliciete dimensie, de ander wordt automatisch berekend om de verhoudingen te behouden
+<LI>Geen expliciete dimensies. In dit geval wordt de afbeelding weergegeven op 72 dpi
+</UL>
+Ondersteunde bestandstypen zijn JPEG, PNG en GIF. De GD extensie is vereist voor GIF.
+<BR>
+<BR>
+Voor JPEG zijn alle kleuren toegestaan:
+<UL>
+<LI>Grijswaarden
+<LI>Ware Kleuren (24 bits)
+<LI>CMYK (32 bits)
+</UL>
+Voor PNG zijn de volgende types toegestaan:
+<UL>
+<LI>Grijswaarden van maximaal 8 bits (256 levels)
+<LI>Geïndexeerde kleuren
+<LI>Ware kleuren (24 bits)
+</UL>
+Maar niet:
+<UL>
+<LI>Interlacing
+<LI>Alpha kanaal
+</UL>
+Voor GIF: in het geval van bewegende GIF bestanden, wordt slechts het eerste beeld gebruikt.
+<BR>
+<BR>
+Als een transparente kleur gedefinieerd is, zal deze worden gebruikt.
+<BR>
+Het formaat kan expliciet worden opgegeven of worden afgeleid van de bestands extensie.
+<BR>
+Het is mogelijk een link over een afbeelding te plaatsen.
+<BR>
+<BR>
+Opmerking: als een afbeelding meerdere malen wordt gebruikt, wordt slechts één kopie wordt in het bestand ingesloten.
+<h2>Parameters</h2>
+<dl class="param">
+<dt><code>file</code></dt>
+<dd>
+Naam van het bestand waarin de afbeelding zich bevindt.
+</dd>
+<dt><code>x</code></dt>
+<dd>
+Abscis (X-Coördinaat) van de linkerbovenhoek. Wanneer niet ingegeven of gelijk aan nul, wordt de huidige
+Abscis gebruikt.
+</dd>
+<dt><code>y</code></dt>
+<dd>
+Ordinaat (Y-Coördinaat) van de linkerbovenhoek. Wanneer niet ingegeven of gelijk aan nul, wordt de huidige
+Ordinaat gebruikt, bovendien wordt - wanneer nodig - eerst een nieuwe pagina einde regel geactiveerd (dit
+is alleen als de pagina einde automatisch is ingeschakeld) en, na de oproep, wordt de huidige Ordinate
+verplaatst naar de onderkant van de afbeelding.
+</dd>
+<dt><code>w</code></dt>
+<dd>
+Breedte vam de afbeelding op de pagina. Wanneer niet ingegeven of gelijk aan nul, wordt deze
+automatisch berekend.
+</dd>
+<dt><code>h</code></dt>
+<dd>
+Hoogte vam de afbeelding op de pagina. Wanneer niet ingegeven of gelijk aan nul, wordt deze
+automatisch berekend.
+</dd>
+<dt><code>type</code></dt>
+<dd>
+Bestandstype. Mogelijke waardes zijn (hoofdletter ongevoelig): <TT>JPG</TT>, <TT>JPEG</TT>,
+<TT>PNG</TT>, <TT>GIF</TT>. Wanneer niet ingegeven, wordt het type bepaald uit de bestandsextensie.
+</dd>
+<dt><code>link</code></dt>
+<dd>
+URL of identifier die door AddLink() wordt teruggegeven.
+</dd>
+</dl>
+<h2>Bekijk ook</h2>
+<a href="addlink.htm">AddLink()</a>.
+<hr style="margin-top:1.5em">
+<div style="text-align:center"><a href="index.htm">Index</a></div>
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Output</title>
+<link type="text/css" rel="stylesheet" href="fpdf.css">
+</head>
+<body>
+<h1>Output</h1>
+<code><b>string</b> Output([<b>string</b> name, <b>string</b> dest])</code>
+<h2>Omschrijving</h2>
+Stuurt het document naar de gegeven bestemming: String, lokaal bestand of browser.
+In het laatste geval wordt of de plug-in gebruikt (wanneer aanwezig) of een download
+("Opslaan als" dialoog scherm) geforceerd.
+<BR>
+Deze methode roept eerst Close() aan wanneer nodig om het document te beëindigen.
+<h2>Parameters</h2>
+<dl class="param">
+<dt><code>name</code></dt>
+<dd>
+De naam van het bestand. Wanneer niet gegeven zal het document naar de browser
+worden verstuurd. (Bestemming <TT>I</TT>) met de naam <TT>doc.pdf</TT>.
+</dd>
+<dt><code>dest</code></dt>
+<dd>
+Bestemming waar het bestand naar toe moet worden verstuurd. Het kan een van de
+volgende waarden aannemen:
+<UL>
+<LI><TT>I</TT>: Verstuurt het bestand naar de browser. De plug-in wordt gebruikt wanneer
+beschikbaar. De naam ingegeven door <TT>name</TT> wordt gebruikt wanneer men de "Opslaan
+als" optie gebruikt bij de link die de PDF genereert.
+<LI><TT>D</TT>: Verstuurt het naar de browser en forceert een download met de naam gegeven
+door <TT>name</TT>.
+<LI><TT>F</TT>: Slaat het op als een lokaal bestand met de naam gegeven door <TT>name</TT>.
+<LI><TT>S</TT>: Geeft het document terug als een string. <TT>name</TT> wordt genegeerd.
+</UL>
+</dd>
+</dl>
+<h2>Bekijk ook</h2>
+<a href="close.htm">Close()</a>.
+<hr style="margin-top:1.5em">
+<div style="text-align:center"><a href="index.htm">Index</a></div>
+</body>
+</html>

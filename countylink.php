@@ -9,11 +9,11 @@ if (!isset($_SESSION['name'])) {
 // Function to generate a unique tracking ID
 function generateTrackingID($length = 10) {
     $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    $trackingID = '';
+    $CtrackingID = '';
     for ($i = 0; $i < $length; $i++) {
-        $trackingID .= $characters[rand(0, strlen($characters) - 1)];
+        $CtrackingID .= $characters[rand(0, strlen($characters) - 1)];
     }
-    return $trackingID;
+    return $CtrackingID;
 }
 
 // Initialize variables for form fields
@@ -34,7 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = $_SESSION['name'];
 
     // Generate a unique tracking ID
-    $trackingID = generateTrackingID();
+    $CtrackingID = generateTrackingID();
 
     // Database connection
     $conn = mysqli_connect($server, $user, $pass, $database);
@@ -45,11 +45,43 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Insert the package data into the database with a "Pending Approval" status
-    $sql = "INSERT INTO countypackages (customerName, phoneNumber, sendingFrom, FromAgent, packageColor, sendingTo, ToAgent, status, username, tracking_id) VALUES ('$customerName', '$phoneNumber', '$sendingFrom', '$agentStore', '$packageColor', '$sendingTo', ' $AgentStore', 'Pending Approval', '$username', '$trackingID')";
+    $sql = "INSERT INTO countypackages (customerName, phoneNumber, sendingFrom, FromAgent, packageColor, sendingTo, ToAgent, status, username, Ctracking_id) VALUES ('$customerName', '$phoneNumber', '$sendingFrom', '$agentStore', '$packageColor', '$sendingTo', '$AgentStore', 'Pending Approval', '$username', '$CtrackingID')";
 
     if ($conn->query($sql) === TRUE) {
         // Data inserted successfully
-        echo "Package submitted successfully. Tracking ID: $trackingID";
+        echo "Package submitted successfully. Tracking ID: $CtrackingID";
+
+        // M-Pesa API Integration
+        $mpesaUrl = 'https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest';
+        $mpesaHeaders = [
+            'Authorization: Bearer RyCuaXg6sv03vYfCuwoV9xYjONtG',
+            'Content-Type: application/json'
+        ];
+
+        // Construct the M-Pesa payload
+        $mpesaPayload = [
+            "BusinessShortCode" => 174379,
+            "Password" => "MTc0Mzc5YmZiMjc5ZjlhYTliZGJjZjE1OGU5N2RkNzFhNDY3Y2QyZTBjODkzMDU5YjEwZjc4ZTZiNzJhZGExZWQyYzkxOTIwMjMxMTI5MDA0ODE4",
+            "Timestamp" => "20231129004818",
+            "TransactionType" => "CustomerPayBillOnline",
+            "Amount" => 1,
+            "PartyA" => 254113158444,
+            "PartyB" => 174379,
+            "PhoneNumber" => 254790342747,
+            "CallBackURL" => "https://mydomain.com/path",  // Change this URL
+            "AccountReference" => "Deli",
+            "TransactionDesc" => "Payment of package"
+        ];
+
+        $ch = curl_init($mpesaUrl);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $mpesaHeaders);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($mpesaPayload));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        $mpesaResponse = curl_exec($ch);
+        curl_close($ch);
+
+        echo $mpesaResponse;
     } else {
         // Error handling
         echo "Error: " . $sql . "<br>" . $conn->error;
@@ -58,6 +90,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $conn->close(); // Close the database connection
 }
 ?>
+
+<!-- Rest of your HTML code remains unchanged -->
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -291,7 +326,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                         if (firstClick) {
                             // Calculate the delivery fee and display it
-                            const deliveryFee = 250;
+                            const deliveryFee = 300;
                             const feeContainer = document.querySelector(".total-fee");
                             feeContainer.textContent = `Total Fee: Ksh ${deliveryFee}`;
 

@@ -1,25 +1,19 @@
 <?php
+// get_couriers.php
 include 'connection.php';
 
-// Fetch courier users from the database
-$sqlCouriers = "SELECT name FROM users WHERE role = 'courier'";
-$resultCouriers = $conn->query($sqlCouriers);
+$sql = "SELECT name FROM users WHERE role = 'courier'";
+$result = $conn->query($sql);
 
-if (!$resultCouriers) {
-    die("Error: " . $conn->error);
+$couriers = [];
+
+if ($result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+        $couriers[] = $row['name'];
+    }
 }
 
-// Create an array to store the courier usernames
-$couriers = array();
-
-// Fetch usernames and add them to the array
-while ($row = $resultCouriers->fetch_assoc()) {
-    $couriers[] = $row['name'];
-}
-
-// Output the array as JSON
 echo json_encode($couriers);
 
-// Close the database connection
 $conn->close();
 ?>

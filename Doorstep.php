@@ -9,11 +9,11 @@ if (!isset($_SESSION['name'])) {
 // Function to generate a unique tracking ID
 function generateTrackingID($length = 10) {
     $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    $trackingID = '';
+    $DtrackingID = '';
     for ($i = 0; $i < $length; $i++) {
-        $trackingID .= $characters[rand(0, strlen($characters) - 1)];
+        $DtrackingID .= $characters[rand(0, strlen($characters) - 1)];
     }
-    return $trackingID;
+    return $DtrackingID;
 }
 
 // Initialize variables for form fields
@@ -34,7 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $username = $_SESSION['name'];
 
         // Generate a unique tracking ID
-        $trackingID = generateTrackingID();
+        $DtrackingID = generateTrackingID();
 
         // Database connection
         $conn = mysqli_connect($server, $user, $pass, $database);
@@ -45,13 +45,46 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         // Insert the data into the database, including the username and tracking ID
-        $sql = "INSERT INTO doorsteppackages (customerName, phoneNumber, FromAgent, sendingTo, extraInfo, status, username, tracking_id) VALUES (?, ?, ?, ?, ?, 'Pending Approval', ?, ?)";
+        $sql = "INSERT INTO doorsteppackages (customerName, phoneNumber, FromAgent, sendingTo, extraInfo, status, username, Dtracking_id) VALUES (?, ?, ?, ?, ?, 'Pending Approval', ?, ?)";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("sssssss", $customerName, $phoneNumber, $sendingFrom, $sendingTo, $extraInfo, $username, $trackingID);
+        $stmt->bind_param("sssssss", $customerName, $phoneNumber, $sendingFrom, $sendingTo, $extraInfo, $username, $DtrackingID);
 
         if ($stmt->execute()) {
             // Display the total fee
-            echo "Package submitted successfully. Tracking ID: $trackingID";
+            echo "Package submitted successfully. Tracking ID: $DtrackingID";
+
+            // M-Pesa API Integration
+            $mpesaUrl = 'https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest';
+            $mpesaHeaders = [
+                'Authorization: Bearer xzraBxW2kyoTA1jkLbNcfF8a0aHi',
+                'Content-Type: application/json'
+            ];
+
+            // Construct the M-Pesa payload
+            $mpesaPayload = [
+                "BusinessShortCode" => 174379,
+                "Password" => "MTc0Mzc5YmZiMjc5ZjlhYTliZGJjZjE1OGU5N2RkNzFhNDY3Y2QyZTBjODkzMDU5YjEwZjc4ZTZiNzJhZGExZWQyYzkxOTIwMjMxMTI5MDEwMjIx",
+                "Timestamp" => "20231129010221",
+                "TransactionType" => "CustomerPayBillOnline",
+                "Amount" => 1,
+                "PartyA" => 254708374149,
+                "PartyB" => 174379,
+                "PhoneNumber" => 254790342747,
+                "CallBackURL" => "https://mydomain.com/path",
+                "AccountReference" => "Deli",
+                "TransactionDesc" => "Payment of package" 
+            ];
+          
+
+            $ch = curl_init($mpesaUrl);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $mpesaHeaders);
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($mpesaPayload));
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            $mpesaResponse = curl_exec($ch);
+            curl_close($ch);
+
+            echo $mpesaResponse;
         } else {
             // If the insertion fails, display an error message
             echo "Error: package not submitted " . $stmt->error;
@@ -63,6 +96,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 ?>
+
+<!-- Rest of your HTML code remains unchanged -->
 
 
 

@@ -1,0 +1,73 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>MultiCell</title>
+<link type="text/css" rel="stylesheet" href="fpdf.css">
+</head>
+<body>
+<h1>MultiCell</h1>
+<code>MultiCell(<b>float</b> w, <b>float</b> h, <b>string</b> txt [, <b>mixed</b> border [, <b>string</b> align [, <b>boolean</b> fill]]])</code>
+<h2>Omschrijving</h2>
+Deze methode staat het weergeven van tekst met line breaks toe. Deze line breaks kunnen automatisch zijn (zodra ze de rechterkant van de cel bereiken) of expliciet zijn (via het \n karakter). Er worden zoveel cellen als nodig zijn weergegeven, de een onder de ander.
+<BR>
+De tekst kan worden uitgelijnd, gecentreerd of uitgetrokken (over de hele breedte zetten). Van het cellen blok kan je een rand instellen en de achtergrond kan worden ingekleurd.
+<h2>Parameters</h2>
+<dl class="param">
+<dt><code>w</code></dt>
+<dd>
+Cel breedte. Wanneer <TT>0</TT> zal de cel tot de rechtermarge uitbreiden.
+</dd>
+<dt><code>h</code></dt>
+<dd>
+Cel hoogte
+</dd>
+<dt><code>txt</code></dt>
+<dd>
+String om weer te geven.
+</dd>
+<dt><code>border</code></dt>
+<dd>
+Geeft aan of er randen moeten worden getekend rond de cel. De waarde kan een nummer zijn:
+<UL>
+<LI><TT>0</TT>: Geen rand
+<LI><TT>1</TT>: Rand
+</UL>
+Of de string kan één of meer van de volgende tekens bevatten (in willekeurige volgorde)
+<UL>
+<LI><TT>L</TT>: Links
+<LI><TT>T</TT>: Boven
+<LI><TT>R</TT>: Rechts
+<LI><TT>B</TT>: Onder
+</UL>
+Standaard waarde: <TT>0</TT>.
+</dd>
+<dt><code>align</code></dt>
+<dd>
+Staat toe de tekst te centreren of uit te lijnen. Mogelijke waardes zijn:
+<UL>
+<LI><TT>L</TT> of lege string: Links uitlijnen
+<LI><TT>C</TT>: Centreren
+<LI><TT>R</TT>: Rechts uitlijnen
+<LI><TT>J</TT>: Uitvullen (standaard waarde)
+</UL>
+</dd>
+<dt><code>fill</code></dt>
+<dd>
+Geeft aan of de cel achtergrond moet worden ingekleurd (<TT>true</TT>) of transparant moet zijn (<TT>false</TT>).
+Standaard waarde: <TT>false</TT>.
+</dd>
+</dl>
+<h2>Bekijk ook</h2>
+<a href="setfont.htm">SetFont()</a>,
+<a href="setdrawcolor.htm">SetDrawColor()</a>,
+<a href="setfillcolor.htm">SetFillColor()</a>,
+<a href="settextcolor.htm">SetTextColor()</a>,
+<a href="setlinewidth.htm">SetLineWidth()</a>,
+<a href="cell.htm">Cell()</a>,
+<a href="write.htm">Write()</a>,
+<a href="setautopagebreak.htm">SetAutoPageBreak()</a>.
+<hr style="margin-top:1.5em">
+<div style="text-align:center"><a href="index.htm">Index</a></div>
+</body>
+</html>
