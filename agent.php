@@ -55,7 +55,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Call M-Pesa API for payment
         $mpesaCh = curl_init('https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest');
         curl_setopt($mpesaCh, CURLOPT_HTTPHEADER, [
-            'Authorization: Bearer qDYcu423qrGKuJvpl95MmCN6TjzZ',
+            'Authorization:  Bearer wEDbcsA1YBGZQXaBVasDn2BQKeAf',
             'Content-Type: application/json'
         ]);
         curl_setopt($mpesaCh, CURLOPT_POST, 1);

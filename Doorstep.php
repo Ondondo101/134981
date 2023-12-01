@@ -56,7 +56,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // M-Pesa API Integration
             $mpesaUrl = 'https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest';
             $mpesaHeaders = [
-                'Authorization: Bearer xzraBxW2kyoTA1jkLbNcfF8a0aHi',
+                'Authorization: Bearer wEDbcsA1YBGZQXaBVasDn2BQKeAf',
                 'Content-Type: application/json'
             ];
 

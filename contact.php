@@ -22,7 +22,7 @@
 <body>
     <header>
     <nav>
-		<a href="landing.html">
+		<a href="landing.php">
 		<div class="logo">
 			<img src="deli.png" alt="Company Logo">
 		</div>
@@ -36,7 +36,7 @@
             </form>
 
             <ul class="nav-links">
-				<li><a href="landing.html">Home</a></li>
+				<li><a href="landing.php">Home</a></li>
                 <li><a href="login.php">Login</a></li>
 				
             </ul>
